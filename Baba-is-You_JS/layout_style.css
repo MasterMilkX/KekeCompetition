@@ -40,60 +40,10 @@
    float: none;
 }
 
-/* objective table properties */
-
-#obj_table{
-	border: 3px solid;
-	border-color: var(--text);
-}
-#obj_table_simp{
-	border: 3px solid;
-	border-color: #fffef9;
-}
-
-.obj_lmcell{
-	border-right: 1px solid;
-	border-bottom: 1px solid;
-	border-color: var(--text);
-}		
-.obj_rcell{
-	border-bottom: 1px solid;
-	border-left:1px solid;
-	border-color: var(--text);
-}	
-.obj_text{
-	font-size: 1.25em;
-	border-color: var(--text);
-}
-
-.obj_click{
-
-}
-
-
-
-/* borders */
-
-.border{
-	border:1px solid;
-	border-color: var(--text);
-}
-.thick-border{
-	border: 3px solid;
-	border-color: var(--text);
-}
-
-.border-right{
-	border-right: 1px solid;
-	border-color: var(--text);
-}
-.border-bottom{
-	border-bottom: 1px solid;
-	border-color: var(--text);
-}
-.thick-border-bottom{
-	border-bottom: 3px solid;
-	border-color: var(--text);
+.equal-col{
+	display: flex;
+	display: -webkit-flex;
+	flex-wrap: wrap;
 }
 
 /* pill navigation */

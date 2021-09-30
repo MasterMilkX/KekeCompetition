@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>Level GUI Mode - Keke Competition (offline)</title>
+		<meta charset="utf-8">
+
+		<!-- bootstrap stuff -->
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+
+		<!-- main stylesheet -->
+		<link rel="stylesheet" href="layout_style.css">
+
+		<!-- extra styles -->
+		<style>
+			body{
+				background-color: #150E16;
+				color:white;
+				font-family: monospace;
+			}
+
+			button{
+				color:black;
+			}
+
+			/* Left hand stats table */
+			.stat-table{
+				border-style:double;
+				border-width: 5px;
+				border-color:white;
+				/*font-size: 1.2em;*/
+			}
+			.stat-table .col-xs-8{
+				border:1px solid white;
+			}
+			.stat-table .col-xs-4{
+				border:1px solid white;
+			}
+
+			/* Central level selection table */
+			.level-table{
+				border:4px solid white;
+				font-size:1.2em;
+				margin:1em;
+			}
+			.level-table .row{
+				border:1px solid white;
+				padding:0.3em;
+			}
+
+			.level-table .header{
+				border-bottom: 5px solid white;
+			}
+
+			.level-table button{
+				font-size:0.75em;
+			}
+
+			/* Right hand level set and agent selection */
+			#levelSetSelection, #agentSelection{
+				font-size:1.4em;
+			}
+			#levelSetList, #agentList{
+				color:black;
+				padding:5px;
+				font-size:1em;
+
+			}
+
+		</style>
+
+
+	</head>
+	<body>
+		<div class='container top-buffer1'>
+			<div class='row'>
+				<div class='col-xs-8 col-xs-offset-2 text-center'>
+					<img src='keke_ai_logo.png' max-width='60%'>
+				</div>
+			</div>
+			<div class='row top-buffer1'>
+				<!-- agent level solve stats -->
+				<div class='col-xs-2 text-center' style='border:1px solid blue'>
+					<!-- level completion stats -->
+					<div class='top-buffer3' style='margin-bottom: 1em;color:#f00;font-size:1.5em'>Level Completion</div>
+					<div class='stat-table'>
+						<div class='row row-no-gutters equal-col' style='background-color:#00EE0088'>
+							<div class='col-xs-8'>Win</div>
+							<div class='col-xs-4' id='level_win_num'>420</div>
+						</div>
+						<div class='row row-no-gutters equal-col' style='background-color:#EE000088'>
+							<div class='col-xs-8'>Lose</div>
+							<div class='col-xs-4' id='level_lose_num'>13</div>
+						</div>
+						<div class='row row-no-gutters equal-col'>
+							<div class='col-xs-8'>Unsolved</div>
+							<div class='col-xs-4' id='level_unsolve_num'>9001</div>
+						</div>
+						
+					</div>
+					<div class='row row-no-gutters stat-table' style='margin-top:1em'>
+							<div class='col-xs-8'>Accuracy</div>
+							<div class='col-xs-4' id='level_unsolve_num'>69%</div>
+					</div>
+
+					<!-- level averages stats -->
+					<div class='top-buffer3' style='margin-bottom: 1em;color:#f00;font-size:1.5em'>Solution stats</div>
+					<div class='stat-table '>
+						<div class='row row-no-gutters equal-col'>
+							<div class='col-xs-8'>Avg. # iterations</div>
+							<div class='col-xs-4' id='level_win_num'>🧐</div>
+						</div>
+						<div class='row row-no-gutters equal-col'>
+							<div class='col-xs-8'>Avg. runtime</div>
+							<div class='col-xs-4' id='level_unsolve_num'>😏</div>
+						</div>
+						<div class='row row-no-gutters equal-col'>
+							<div class='col-xs-8'>Avg. solution length</div>
+							<div class='col-xs-4' id='level_lose_num' height='100%'>😬</div>
+						</div>
+					</div>
+					<div>&nbsp;</div>
+				</div>
+
+				<!-- level table -->
+				<div class='col-xs-8 text-center' style='border:1px solid green'>
+					<!-- main level table -->
+					<div class='level-table'>
+						<div class='row row-no-gutters header'>
+							<div class='col-xs-2'>Level ID #</div>
+							<div class='col-xs-4'>Status</div>
+							<div class='col-xs-3'>Iterations</div>
+							<div class='col-xs-3'>GUI Mode</div>
+						</div>
+						<div class='row row-no-gutters'>
+							<div class='col-xs-2 levelID'>0</div>
+							<div class='col-xs-4 solveStat'>[ solving... ]</div>
+							<div class='col-xs-3 solveIter'>0 / 10000</div>
+							<div class='col-xs-3'><button>Show Level</button></div>
+						</div>
+						<div class='row row-no-gutters'>
+							<div class='col-xs-2 levelID'>1</div>
+							<div class='col-xs-4 solveStat'>[ - ]</div>
+							<div class='col-xs-3 solveIter'>0 / 10000</div>
+							<div class='col-xs-3'><button>Show Level</button></div>
+						</div>
+					</div>
+				</div>
+
+				<!-- agent + level set selection -->
+				<div class='col-xs-2 text-center' style='border:1px solid red'>
+					<div class='row row-no-gutters top-buffer5'>
+						<div class='col-xs-12' id='levelSetSelection'>
+							Level Set:<br>
+							<select id='levelSetList'>
+								<option value='demo'>Demo</option>
+								<option value='test1'>Test 1</option>
+							</select>
+						</div>
+					</div>
+					<div class='row row-no-gutters top-buffer5'>
+						<div class='col-xs-12' id='agentSelection'>
+							Agent:<br>
+							<select id='agentList'>
+								<option value='default'>Default</option>
+								<option value='random'>Random</option>
+							</select>
+						</div>
+					</div>
+					<div class='row row-no-gutters top-buffer5'>
+						<div class='col-xs-12'>
+							<button style='background-color:#dd000088;padding:0.5em'>Reset all levels</button>
+						</div>
+					</div>
+					<div>&nbsp;</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
