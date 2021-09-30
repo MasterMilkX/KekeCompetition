@@ -1,0 +1,28 @@
+{"levels" : [
+
+
+	{
+		"id": "0",
+		"name": "evade",
+		"author": "milk",
+		"ascii": "____________\n_F13wwwwK14_\n_w.o.okofow_\n_wo.oko.o.w_\n_wko.o.o.ow_\n_wo.o.o.okw_\n_wko.o.o.ow_\n_wo.o.o.okw_\n_wko.o.o.ow_\n_wo.obo.o.w_\n_K17wwwwB12_\n____________",
+		"solution": "uuluuuurdrruur",
+	},
+
+	{
+		"id": "1",
+		"name": "wallstop",
+		"author": "milk",
+		"ascii": "__________\n_.....B12_\n_.W......_\n_.1wwwww._\n_.6wf..w._\n_..w..kw._\n_F.wwwww._\n_1......._\n_3...bK17_\n__________",
+		"solution": "llluuuluuurrrdd",
+	},
+
+	{
+		"id": "2",
+		"name": "swamp",
+		"author": "Baba",
+		"ascii": "__________\n_F13....G_\n_..R15a.1_\n_.......0_\n_a.A.b.a._\n_....a..._\n_B....ggg_\n_1.a.ag.a_\n_2....g.f_\n__________",
+		"solution": "ruuuldduulddrrddldldrrrdr",
+	},
+
+]}

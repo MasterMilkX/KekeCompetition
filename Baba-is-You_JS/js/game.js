@@ -50,7 +50,6 @@ var obj_map = [];
 var mapAllReady = false;
 var curLevel = 0;
 var demo = false;
-var mapThumbnail = null;
 
 //sprites
 
@@ -78,8 +77,8 @@ var movedObjs = [];
 var moveSteps = [];
 var initRules = [];
 var endRules = [];
-
-// events
+ 
+// event screens
 var winscreen = new Image();
 winscreen.src = "img/win_screen.png";
 var ws_ready = false;
@@ -155,17 +154,21 @@ function anyActionKey(){
 // UPDATE THE GAME STATE WITH ACTION KEY PRESS [UNDO, IDLE, RESET]
 function stateChange(){
 	if(!acted && anyActionKey()){
+		//reset the level
 		if(keys[r_key]){
 			if(demo)
 				newLevel(curLevel);
 			else
 				initEditTest();
 		}
+		//iterate to the next level
 		else if(keys[space_key] && wonGame && demo){
 			curLevel++;
 			if(curLevel < demoLevels.length)
 				newLevel(curLevel);
-		}else if(keys[z_key] && !aiControl){
+		}
+		//undo a move
+		else if(keys[z_key] && !aiControl){
 			undoMove();
 		}
 		acted = true;
@@ -216,18 +219,12 @@ function key_input(){
 		}
 
 		wonGame = win(game_parameters['players'], game_parameters['winnables']);
-		//copt final result rules
+		
+		//copy final result rules
 		if(wonGame){
 			drawWin();
 			endRules = getCurRules();
 			localStorage.setItem("endRules", JSON.stringify(endRules));
-			if(document.getElementById('submitCol')){
-				saveLevel = true;
-				document.getElementById("submitCol").onclick = addNewLevel;
-				//allowSubmit();
-				//getBestLevel(isBestLevel);
-			}
-
 		}
 
 		moved = true;
@@ -249,6 +246,7 @@ function undoMove(){
 	//setup keke
 	wonGame = false;
 
+	//iterate through n-1 previous moves
 	for(let s=0;s<newSolution.length;s++){
 		nextMove(newSolution[s]);
 	}
@@ -263,9 +261,11 @@ function nextMove(nextDir){
 	var moved_objects = [];
 	moved = false;
 
+	//if directional move, move the players
 	if(nextDir != "")
 		movePlayers(nextDir, moved_objects, game_parameters);
 
+	//move the movers (i.e. X-is-MOVE objects)
 	moveAutoMovers(moved_objects, game_parameters);
 
 	//update the rule set if this object is a rule
@@ -276,18 +276,12 @@ function nextMove(nextDir){
 		}
 	}
 
-
+	//check if the game has been won
 	wonGame = win(game_parameters['players'],game_parameters['winnables']);
 	if(wonGame){
 		drawWin();
 		endRules = getCurRules();
 		localStorage.setItem("endRules", JSON.stringify(endRules));
-		if(document.getElementById('submitCol')){
-			saveLevel = true;
-			document.getElementById("submitCol").onclick = addNewLevel;
-			allowSubmit();
-			//getBestLevel(isBestLevel);
-		}
 	}
 
 	
@@ -328,12 +322,6 @@ function ai_input(){
 		drawWin();
 		endRules = getCurRules();
 		localStorage.setItem("endRules", JSON.stringify(endRules));
-		if(document.getElementById('submitCol')){
-			saveLevel = true;
-			document.getElementById("submitCol").onclick = addNewLevel;
-			allowSubmit();
-			//getBestLevel(isBestLevel);
-		}
 	}
 
 	
@@ -502,21 +490,10 @@ function movePlayers(dir, mo, parameters){
 		//console.log(curPlayer.name + " (" + curPlayer.x + "," + curPlayer.y + ")");
 	}
 
-	//check for win condition
-	//wonGame = win(players, parameters['winnables']);
-
 	//check for kill condition
 	destroyObjs(killed(players, killers), parameters);
 	destroyObjs(drowned(phys, sinkers), parameters);
 	destroyObjs(badFeats(featured, sort_phys), parameters);
-
-	/*
-	if(wonGame){
-		endRules = getCurRules();
-		saveLevel = confirm('Level solved!\nWould you like to submit this to the server?');
-		console.log("prompting")
-	}
-	*/
 }
 
 // MOVES ALL NPC (MOVER) OBJECTS
@@ -622,17 +599,6 @@ function drawWin(){
 		(canvas.width/2)-(3*size), (canvas.height/2)-(1.5*size),6*size, 3*size)
 	}
 	
-
-	//draw the label overtop of it
-	// if(!demo && importData && importData != "1"){
-	// 	let l = translateChromo(getChromosomeRep(initRules, endRules));
-	// 	ctx.font = "bold " + (l.length <= 10 ? "20px" :"14px") + " Consolas";
-	// 	ctx.fillStyle = "#DC386A";
-	// 	ctx.textAlign = "center";
-	// 	ctx.fillText(l, (canvas.width/2), (canvas.height/2)+(size*(3.0/4.0)));
-	// }
-	//if(!demo)
-	//	setTimeout(function() {if (wonGame && confirm("Close Window?")) {window.close();}}, 5000)
 }
 
 // DRAW 'KEKE IS SOLVING' WINDOW IF IN THE MIDDLE OF SOLVING
@@ -698,11 +664,6 @@ function render(){
 
 	if(show_controls)
 		drawControls();
-
-	//get a thumbnail of the map before any moves are made
-	// if(mapThumbnail == null && mapAllReady && moveSteps.length == 0 && curPath == 0){
-	// 	mapThumbnail = canvas.toDataURL("map/png");
-	// }
 	
 	ctx.restore();
 }
@@ -720,18 +681,9 @@ function initDemo(lvl){
 
 // START THE GAME TO TEST THE LEVEL
 function initEditTest(){
-	//change author
-	document.getElementById("authorTitle").innerHTML = "AUTHOR: " + localStorage.author;
+	//change level id
+	document.getElementById("levelIndex").innerHTML = "Level: " + localStorage.levelNum;
 
-	//change title or allow level naming
-	// if(importData && importData == "1"){
-	// 	document.getElementById("levelTitle").innerHTML = (localStorage.levelName == "" ? "(untitled)" : localStorage.levelName);
-	// 	document.getElementById("levelTitle").style.display = "inline-block";
-	// 	document.getElementById("levelNameIn").style.display = "none";
-	// }else{
-	// 	document.getElementById("levelNameIn").style.display = "inline-block";
-	// 	document.getElementById("levelTitle").style.display = "none";
-	// }
 
 	demo = false;
 	saveLevel = false;
@@ -757,20 +709,6 @@ function initEditTest(){
 		//alert('test map not found - using demo levels instead');
 		initDemo(0);
 	}
-
-
-	//check if level is saved or not
-	let subbtn = document.getElementById("submitCol");
-	// if(importData == "1"){
-	// 	//make submit button a share button
-	// 	subbtn.onclick = function(){copyLevelURL()};
-	// 	subbtn.innerHTML = "SHARE<br>LEVEL";
-	// 	subbtn.classList.add("sha");
-
-	// }else{
-	// 	//potential submit to database (disable for now)
-	// 	subbtn.classList.add("dis");
-	// }
 }			
 
 // CREATES A DEMO LEVEL
@@ -903,12 +841,6 @@ function main(){
 
 // USE THE AI BOT TO SOLVE THE LEVEL IF A SOLUTION CAN BE FOUND
 function useKeke(){
-	/*
-	if(alreadySolved)
-		return;
-
-	solving = true;
-	*/
 
 	//path not found yet
 	if(curPath.length == 0){
@@ -942,7 +874,6 @@ function useKeke(){
 				console.log("UNSOLVABLE!");
 				unsolvable = true;
 			}
-		//alreadySolved = true;
 		});
 	}
 	//path already found
@@ -1044,31 +975,8 @@ function allowSubmit(){
 }
 
 
-///////////////      PHP/SQL/AJAX FUNCTIONS      ///////////////
+///////////////      EXPORTING FUNCTIONS      ///////////////
 
-// ADD A LEVEL TO THE SITE DATABASE
-function addNewLevel(){
-	//send to the php to send to the server
-	if(saveLevel){
-		$.ajax({
-			type : "POST",
-			url : "submitLevel.php",
-			data : { 
-				author : localStorage.author,
-				chromosome_rep : getChromosomeRep(initRules, endRules),
-				ascii_map : map2Str(game_parameters["orig_map"]),
-				map_width : mapWidth,
-				map_height : mapHeight,
-				solution : minimizeSolution((aiControl ? curPath : moveSteps)),
-				level_name : (document.getElementById("levelNameIn") ? document.getElementById("levelNameIn").value : "")
-			},	
-			success: function(res){alert(res);saveLevel = false;allowSubmit();},
-			error: function(res){alert(res);}
-		});
-	}
-
-	//return saveLevel;
-}
 
 function minimizeSolution(solution){
 	let miniSol = [];
@@ -1078,20 +986,10 @@ function minimizeSolution(solution){
 	return miniSol.join("");
 }
 
+function level2JSON(lvl){
 
-//copies the level url to the clipboard for the user
-function copyLevelURL(){
-	var dummy = document.createElement('input'),
-    text = window.location.href;
-
-	document.body.appendChild(dummy);
-	dummy.value = text;
-	dummy.select();
-	document.execCommand('copy');
-	document.body.removeChild(dummy);
-
-	document.getElementById("copyStat").style.display = 'block';
 }
+
 
 /////////////////   HTML5 FUNCTIONS  //////////////////
 

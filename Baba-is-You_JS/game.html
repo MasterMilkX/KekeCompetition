@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Level Tester - Baba is Y'all V2</title>
+		<title>Level GUI Mode - Keke Competition (offline)</title>
 		<meta charset="utf-8">
 
 		<!-- bootstrap stuff -->
@@ -63,15 +63,9 @@
 		<div class='container top-buffer05'>
 			<!-- author header -->
 			<div class='row top-buffer05' id='authorID'>
-				<div class='col-xs-12 text-center' style='font-size: 1.5em' id='authorTitle'>
-					Author: BABA
+				<div class='col-xs-12 text-center' style='font-size: 1.5em' id='levelIndex'>
+					Level: #
 				</div>
-				<a style= "float: right; color: black; font-weight: bold; background-color: #03dc03; padding: 8px 16px; text-align: center;" href="javascript:close_window();">CLOSE</a>
-				<script>
-					function close_window() {
-						close();
-					}
-				</script>
 			</div>
 			<!-- game window -->
 			<div class='row row-no-gutters top-buffer05'>
@@ -82,6 +76,22 @@
 				</div>
 			</div>
 			<!-- special buttons -->
+			<div class='row row-no-gutters' style='border-color:white'>
+				<div class='col-xs-2 col-xs-offset-3 text-center btm_btn' onclick=''>
+					[R]eset<br>Level
+				</div>
+				<div class='col-xs-2 text-center' style='font-size: 1.3em'>
+					Agent:<br>
+					<select id='agentSet' style='color:black'>
+						<option value='human' selected>Human</option>
+						<option value='default'>Default</option>
+						<option value='random'>Random</option>
+					</select>
+				</div>
+				<div class='col-xs-2 text-center btm_btn' onclick=''>
+					Return to<br>Level List
+				</div>
+			</div>
 			<!--
 			<div class='row row-no-gutters' style='border-color:white'>
 				<div class='col-xs-2 col-xs-offset-3 text-center btm_btn' id='controlCol' onclick='showControls()'>
@@ -95,20 +105,6 @@
 				</div>
 			</div>
 			-->
-
-			<!-- level namer -->
-			<div class='row row-no-gutters top-buffer05'>
-				<div class='col-xs-6 col-xs-offset-3' style='text-align: center'>
-					Level name: <input type='text' width='20' id='levelNameIn' style='color:#000;display:inline-block;'> <p style='color:#f00;font-size:1.5vw;display:none' id='levelTitle'></p>
-				</div>
-			</div>
-
-			<!-- share status if available -->
-			<div class='row row-no-gutters top-buffer05'>
-				<div class='col-xs-6 col-xs-offset-3' style='text-align: center'>
-					<p id='copyStat' style='color:#fff;font-size:1vw;display:none'>Level URL Copied to clipboard!</p>
-				</div>
-			</div>
 		</div>
 
 		<!-- scripts -->
