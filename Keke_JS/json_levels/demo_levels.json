@@ -1,0 +1,18 @@
+{"levels" : [
+
+	{"id":1,"name":"","author":"Demo","ascii":"__________\n_B12..F13_\n_........_\n_........_\n_........_\n_.b....f._\n_........_\n_........_\n_........_\n__________","solution":"rrrrr"},
+	{"id":2,"name":"","author":"DEMO","ascii":"__________\n_B12...13_\n_........_\n_........_\n_.....F.._\n_.b....f._\n_........_\n_........_\n_........_\n__________","solution":"rrrruuudddr"},
+	{"id":3,"name":"","author":"DEMO","ascii":"__________\n_........_\n_...B12.._\n_........_\n_.1......_\n_.3..b..._\n_........_\n_........_\n_........_\n__________","solution":"luullldrrlldrrdru"},
+	{"id":4,"name":"","author":"DEMO","ascii":"__________\n_B13..F12_\n_........_\n_.b....f._\n_........_\n_........_\n_.a....v._\n_........_\n_A13..V12_\n__________","solution":"lllll"},
+	{"id":5,"name":"","author":"DEMO","ascii":"__________\n_B12..F13_\n_........_\n_........_\n_.b....r._\n_........_\n_...R...._\n_........_\n_......1F_\n__________","solution":"ddrrrurdduuur"},
+	{"id":6,"name":"","author":"DEMO","ascii":"__________\n_B12..F13_\n_........_\n_........_\n_.b....r._\n_........_\n_.R1R...._\n_........_\n_.....R1F_\n__________","solution":"rrddrrruu"},
+	{"id":7,"name":"","author":"DEMO","ascii":"__________\n_B12..F13_\n_........_\n_...rr..._\n_..r.fr.._\n_..r..r.._\n_...rr..._\n_.b......_\n_.....R15_\n__________","solution":"ruurru"},
+	{"id":8,"name":"","author":"DEMO","ascii":"__________\n_K......._\n_1k.B..12_\n_7......._\n_........_\n_..b.f..._\n_........_\n_........_\n_.....F13_\n__________","solution":"sssrr"},
+	{"id":9,"name":"","author":"DEMO","ascii":"__________\n_....f..._\n_........_\n_wwwwwwww_\n_.W......_\n_.1..b..._\n_.6......_\n_........_\n_B12..F13_\n__________","solution":"ullluuurrr"},
+	{"id":10,"name":"","author":"DEMO","ascii":"__________\n_........_\n_S14....._\n_....sss._\n_.b..sfs._\n_....sss._\n_........_\n_........_\n_B12..F13_\n__________","solution":"ruurrrdd"},
+	{"id":11,"name":"","author":"DEMO","ascii":"__________\n_B12gg..._\n_F13gg.f._\n_gbggg..._\n_g.gggggg_\n_g.gggggg_\n_g.gg...._\n_g....G10_\n_gggg...._\n__________","solution":"ddddrrrdrruuruuulu"},
+	{"id":12,"name":"","author":"DEMO","ascii":"__________\n_B12gg..._\n_F13gg.f._\n_gbggg..._\n_g.gggggg_\n_g.gggggg_\n_G.ggg.rr_\n_1......._\n_0R15g..._\n__________","solution":"ddddrrrrrrudllurdruuuuul"},
+	{"id":13,"name":"","author":"DEMO","ascii":"__________\n_...f...._\n_........_\n_llllllll_\n_L.....B._\n_1...b.1._\n_8.....9._\n_........_\n_B12..F13_\n__________","solution":"urrlluuul"},
+	{"id":14,"name":"","author":"DEMO","ascii":"__________\n_........_\n_..k..f.._\n_wwwwwwww_\n_.......W_\n_..K..b.1_\n_.......6_\n_B12....._\n_.....F13_\n__________","solution":"llllulddrrr"}
+
+]}

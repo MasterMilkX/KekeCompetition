@@ -986,8 +986,19 @@ function minimizeSolution(solution){
 	return miniSol.join("");
 }
 
-function level2JSON(lvl){
+function level2JSON(lvl=null, ID=0, name="", author="Baba"){
+	if(lvl == null){
+		lvl = game_parameters["orig_map"];
+	}
 
+	let jsonLevel = {};
+	jsonLevel.id = ID;
+	jsonLevel.name = name;
+	jsonLevel.author = author;
+	jsonLevel.ascii = map2Str(lvl);
+	jsonLevel.solution = minimizeSolution(moveSteps);
+
+	return JSON.stringify(jsonLevel);
 }
 
 

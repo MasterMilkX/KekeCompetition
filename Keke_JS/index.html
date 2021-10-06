@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Level GUI Mode - Keke Competition (offline)</title>
+		<title>Level List - Keke Competition (offline)</title>
 		<meta charset="utf-8">
 
 		<!-- bootstrap stuff -->
@@ -53,10 +53,17 @@
 
 			.level-table .header{
 				border-bottom: 5px solid white;
+				font-size:1.1em;
+				font-weight: bold;
+				background-color: #fff;
+				color:#000;
 			}
 
 			.level-table button{
 				font-size:0.75em;
+			}
+			.solvedLevel{
+				background-color: #00EE0088;
 			}
 
 			/* Right hand level set and agent selection */
@@ -71,7 +78,8 @@
 			}
 
 		</style>
-
+		<!-- <script src='js/level-set.js'></script> -->
+		<!-- <script src='get-level-jsons.js'></script> -->
 
 	</head>
 	<body>
@@ -135,14 +143,20 @@
 							<div class='col-xs-3'>Iterations</div>
 							<div class='col-xs-3'>GUI Mode</div>
 						</div>
-						<div class='row row-no-gutters'>
+						<div class='row row-no-gutters solvedLevel'>
 							<div class='col-xs-2 levelID'>0</div>
+							<div class='col-xs-4 solveStat'>[ Solved! ]</div>
+							<div class='col-xs-3 solveIter'>5042 / 10000</div>
+							<div class='col-xs-3'><button>Show Level</button></div>
+						</div>
+						<div class='row row-no-gutters'>
+							<div class='col-xs-2 levelID'>1</div>
 							<div class='col-xs-4 solveStat'>[ solving... ]</div>
 							<div class='col-xs-3 solveIter'>0 / 10000</div>
 							<div class='col-xs-3'><button>Show Level</button></div>
 						</div>
 						<div class='row row-no-gutters'>
-							<div class='col-xs-2 levelID'>1</div>
+							<div class='col-xs-2 levelID'>2</div>
 							<div class='col-xs-4 solveStat'>[ - ]</div>
 							<div class='col-xs-3 solveIter'>0 / 10000</div>
 							<div class='col-xs-3'><button>Show Level</button></div>
