@@ -1,10 +1,11 @@
+//read in command line arguments
 const args = process.argv.slice(2)
-var kekeAgent = (args.length > 0 ? args[0] : 'keke-default');
+var kekeAgent = (args.length > 0 ? args[0] : 'default');
 var levelSetName = (args.length > 1 ? args[1] : 'demo_levels');
 var levelNum = (args.length > 2 ? args[2] : 1);
 
-
-var kekejs = require('./' + kekeAgent)
+//get node.js imports
+var kekejs = require('../agents/' + kekeAgent)
 var leveljs = require('./level-set')
 var simjs = require('./simulation')
 
@@ -27,26 +28,39 @@ function run_keke(ascii_level, iterations){
 		// solution found
 		if (solution.length > 0){
 			console.log(`-- SOLUTION FOUND IN ${i} / ${iterations} ITERATIONS --`);
-			return solution;
+			return {"s":solution,"i":i};
 		}
 	}
 
 	console.log(`-- NO SOLUTION FOUND IN ${iterations} ITERATIONS--`);
-	return [];
+	return {"s":[],"i":iterations};
 	
 }
 
+// SOLVE A SINGLE LEVEL FROM A LEVEL SET FOR A SET NUMBER OF ITERATIONS
 function executeLevel(ls,ln,iter){
 	let lvlSet = leveljs.getLevelSet(ls);
-	let lvl1 = leveljs.getLevel(lvlSet,ln);
+	let lvl = leveljs.getLevel(lvlSet,ln);
 	console.log(` -- LEVEL [ ${ln} ] FROM LEVEL SET [ ${ls} ] FOR [ ${iter} ] ITERATIONS --`)
 
 	//run keke solver
-	let solution = run_keke(lvl1.ascii,iter);
+	const start = Date.now();		//start timer
+
+	//solve level
+	let r = run_keke(lvl.ascii,iter);
+	let solution = r.s;
+	let iterCt = r.i;
+
+	const end = Date.now();
+	let timeExec = (end-start)/1000;
 	console.log(`SOLUTION: ${solution}`)
+
+	//export to JSON if solution found
+	leveljs.exportReport(kekeAgent + "_REPORT.json", ls, ln, iterCt, timeExec,solution);
 
 }
 
+// SOLVE ALL LEVELS IN A LEVEL SET FOR A SET NUMBER OF ITERATIONS
 function executeLevelSet(ls,iter){
 	let lvlSet = leveljs.getLevelSet(ls);
 
@@ -55,7 +69,22 @@ function executeLevelSet(ls,iter){
 	for(let l=0;l<lvlSet.length;l++){
 		let lvl = lvlSet[l];
 		console.log(` LEVEL [ ${lvl.id} ] `)
-		run_keke(lvl.ascii,iter);
+		
+
+		//run keke solver
+		const start = Date.now();		//start timer
+
+		//solve level
+		let r = run_keke(lvl.ascii,iter);
+		let solution = r.s;
+		let iterCt = r.i;
+
+		const end = Date.now();
+		let timeExec = (end-start)/1000;
+
+		//export to JSON if solution found
+		leveljs.exportReport(kekeAgent + "_REPORT.json", ls, lvl.id, iterCt, timeExec,solution);
+
 		console.log("");
 	}
 }

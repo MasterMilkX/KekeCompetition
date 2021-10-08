@@ -1,0 +1,91 @@
+[
+  {
+    "levelSet": "demo_levels",
+    "levels": [
+      {
+        "id": 1,
+        "iterations": 22,
+        "time": 0.02,
+        "solution": "rrrrr"
+      },
+      {
+        "id": 2,
+        "iterations": 273,
+        "time": 0.135,
+        "solution": "rrrruuurddd"
+      },
+      {
+        "id": 3,
+        "iterations": 5000,
+        "time": 9.867,
+        "solution": []
+      },
+      {
+        "id": 4,
+        "iterations": 33,
+        "time": 0.016,
+        "solution": "lllll"
+      },
+      {
+        "id": 5,
+        "iterations": 1062,
+        "time": 0.732,
+        "solution": "rddrrurddruuu"
+      },
+      {
+        "id": 6,
+        "iterations": 504,
+        "time": 0.397,
+        "solution": "rrddrrruu"
+      },
+      {
+        "id": 7,
+        "iterations": 5,
+        "time": 0.005,
+        "solution": "rururu"
+      },
+      {
+        "id": 8,
+        "iterations": 5000,
+        "time": 0.001,
+        "solution": []
+      },
+      {
+        "id": 9,
+        "iterations": 324,
+        "time": 0.207,
+        "solution": "ulllrrruuu"
+      },
+      {
+        "id": 10,
+        "iterations": 132,
+        "time": 0.066,
+        "solution": "ruurrrdd"
+      },
+      {
+        "id": 11,
+        "iterations": 214,
+        "time": 0.261,
+        "solution": "ddddrrrurrduuuuu"
+      },
+      {
+        "id": 12,
+        "iterations": 143,
+        "time": 0.199,
+        "solution": "ddddrrrrrrudllurdruuuuul"
+      },
+      {
+        "id": 13,
+        "iterations": 369,
+        "time": 0.269,
+        "solution": "rruuulull"
+      },
+      {
+        "id": 14,
+        "iterations": 227,
+        "time": 0.126,
+        "solution": "llllulddrrr"
+      }
+    ]
+  }
+]
