@@ -42,7 +42,7 @@ function getLevelObj(ls, id){
 // EXPORT THE RESULT FROM SOLVING A LEVEL TO THE AGENT'S JSON FILE
 function exportAgentReport(file,ls,levelID,iterCt,timeTaken,sol){
 	let curReport = [];
-	let filepath = "./agents/"+file;
+	let filepath = "./reports/"+file;
 
 	//if it exists, read in the current report
 	try {
@@ -54,8 +54,8 @@ function exportAgentReport(file,ls,levelID,iterCt,timeTaken,sol){
 	    	}
 	    });
 	    if(j != ""){
-	    	console.log("-- REPORT -- ")
-	    	console.log(j)
+	    	//console.log("-- REPORT -- ")
+	    	//console.log(j)
 			curReport = JSON.parse(j);
 	    }
 		

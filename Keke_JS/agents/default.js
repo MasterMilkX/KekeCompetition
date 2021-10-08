@@ -12,14 +12,9 @@ var agentJSON = "report.json";
 let possActions = ["", "right", "up", "left", "down"];
 let stateSet = [];
 
-let MAX_ITER = 10000;
 let curIteration = 0;
 
 let queue = [];
-
-
-// RETURN THE CURRENT ITERATIONS OVER THE MAXIMUM ITERATION
-function getIterRatio(){return curIteration + " / " + MAX_ITER;}
 
 
 // NODE CLASS FOR EXPLORATION
@@ -77,70 +72,42 @@ function deepCopyObject(obj){
   return tempObj;
 }
 
-// CREATE NEW GAME STATE PARAMETERS AND RESET THE MAP PROPERTIES
-function newParameters(keke_parameters, m){
-	simjs.clearLevel(keke_parameters);
+// CREATE NEW GAME STATE state AND RESET THE MAP PROPERTIES
+function newstate(keke_state, m){
+	simjs.clearLevel(keke_state);
 
-	keke_parameters['orig_map'] = m;
+	keke_state['orig_map'] = m;
 
-	var maps = simjs.splitMap(keke_parameters['orig_map']);
-	keke_parameters['back_map'] = maps[0]
-	keke_parameters['obj_map'] = maps[1];
+	var maps = simjs.splitMap(keke_state['orig_map']);
+	keke_state['back_map'] = maps[0]
+	keke_state['obj_map'] = maps[1];
 	
-	simjs.assignMapObjs(keke_parameters);
-	simjs.interpretRules(keke_parameters);
+	simjs.assignMapObjs(keke_state);
+	simjs.interpretRules(keke_state);
 }
 
 // RESET THE QUEUE AND THE ITERATION COUNT
-function initQueue(param){
+function initQueue(state){
 	//loop until the limit is reached
 	curIteration = 0;
 	stateSet = [];
 
 	//create the initial node
-	let master_node = new node(simjs.map2Str(param['orig_map']), [], null, false, false);
+	let master_node = new node(simjs.map2Str(state['orig_map']), [], null, false, false);
 	queue = [[0, master_node]];
 }
 
 
 
 
-
-// SOLVES THE MAP USING BFS ON THE GAME NODES
-let ot = 0;
-function solve(init_parameters, callback){
-	//console.log(parameters.sort_phys);
-
-	//loop until the limit is reached
-	initQueue(init_parameters);
-
-	ot = setInterval(function(){
-		let solution = iterSolve(init_parameters);
-
-		//found the solution!
-		if(solution.length > 0){
-			clearInterval(ot);
-			ot = 0;
-			callback(solution);
-		}
-
-		//if end of queue or max iterations
-		if(queue.length < 1 || curIteration >= MAX_ITER){
-			clearInterval(ot);
-			ot = 0;
-			callback([]);
-		}
-
-	}, 1);
-}	
-
 // NEXT ITERATION STEP FOR SOLVING
-function iterSolve(init_parameters){
-	if(queue.length < 1 || curIteration >= MAX_ITER)
+function iterSolve(init_state){
+	if(queue.length < 1)
 		return [];
 
+	//pop the next node off the queue and get its children
 	let curnode = queue.shift()[1];
-	children = getChildren(init_parameters['orig_map'], curnode);
+	children = getChildren(init_state['orig_map'], curnode);
 
 	//check if golden child was found
 	for(let c=0;c<children.length;c++){
@@ -151,14 +118,11 @@ function iterSolve(init_parameters){
 		}
 	}
 
-	//console.log(i + "-> +" + children.length + " children / " + queue.length + " queue size");
-
-	//otherwise add to the list (if there's enough room) and sort it for priority
-	if(queue.length < (MAX_ITER - curIteration)){
-		queue.push.apply(queue, children);
-		queue.sort();
-		curIteration++;
-	}
+	//otherwise add to the list and sort it for priority
+	queue.push.apply(queue, children);
+	queue.sort();
+	curIteration++;
+	
 	return [];
 }
 
@@ -167,11 +131,11 @@ function getChildren(rootMap, parent){
 	let children = [];
 
 	for(let a=0;a<possActions.length;a++){
-		//remake parameters everytime
+		//remake state everytime
 		let n_kk_p = {};
-		newParameters(n_kk_p, rootMap)
+		newstate(n_kk_p, rootMap)
 
-		//let n_kk_p = deepCopyObject(rootParam);
+		//let n_kk_p = deepCopyObject(rootstate);
 		let childNode = getNextState(possActions[a], n_kk_p, parent);
 	
 
@@ -258,9 +222,8 @@ function dist(a,b){
 
 // VISIBLE FUNCTION FOR OTHER JS FILES (NODEJS)
 module.exports = {
-	resetQueue : function(){queue = [];},
-	step : function(init_param){return iterSolve(init_param)},
-	initQueue : function(init_param){initQueue(init_param);}
+	step : function(init_state){return iterSolve(init_state)},
+	init : function(init_state){initQueue(init_state);}
 }
 
 

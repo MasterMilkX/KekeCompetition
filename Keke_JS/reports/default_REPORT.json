@@ -5,43 +5,43 @@
       {
         "id": 1,
         "iterations": 22,
-        "time": 0.02,
+        "time": 0.019,
         "solution": "rrrrr"
       },
       {
         "id": 2,
         "iterations": 273,
-        "time": 0.135,
+        "time": 0.131,
         "solution": "rrrruuurddd"
       },
       {
         "id": 3,
         "iterations": 5000,
-        "time": 9.867,
+        "time": 8.918,
         "solution": []
       },
       {
         "id": 4,
         "iterations": 33,
-        "time": 0.016,
+        "time": 0.013,
         "solution": "lllll"
       },
       {
         "id": 5,
         "iterations": 1062,
-        "time": 0.732,
+        "time": 0.634,
         "solution": "rddrrurddruuu"
       },
       {
         "id": 6,
         "iterations": 504,
-        "time": 0.397,
+        "time": 0.338,
         "solution": "rrddrrruu"
       },
       {
         "id": 7,
         "iterations": 5,
-        "time": 0.005,
+        "time": 0.003,
         "solution": "rururu"
       },
       {
@@ -53,37 +53,37 @@
       {
         "id": 9,
         "iterations": 324,
-        "time": 0.207,
+        "time": 0.194,
         "solution": "ulllrrruuu"
       },
       {
         "id": 10,
         "iterations": 132,
-        "time": 0.066,
+        "time": 0.06,
         "solution": "ruurrrdd"
       },
       {
         "id": 11,
         "iterations": 214,
-        "time": 0.261,
+        "time": 0.233,
         "solution": "ddddrrrurrduuuuu"
       },
       {
         "id": 12,
         "iterations": 143,
-        "time": 0.199,
+        "time": 0.186,
         "solution": "ddddrrrrrrudllurdruuuuul"
       },
       {
         "id": 13,
         "iterations": 369,
-        "time": 0.269,
+        "time": 0.256,
         "solution": "rruuulull"
       },
       {
         "id": 14,
         "iterations": 227,
-        "time": 0.126,
+        "time": 0.114,
         "solution": "llllulddrrr"
       }
     ]

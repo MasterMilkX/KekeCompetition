@@ -515,19 +515,19 @@ function reverseChar(val){
 
 //assign the sprite objects to actual objects
 //function assignMapObjs(m, phys, words, sort_phys, is_connectors){
-function assignMapObjs(parameters){
-	//reset the parameters
-	parameters.sort_phys = {};
-	parameters.phys = [];
-	parameters.words = [];
-	parameters.is_connectors = [];
+function assignMapObjs(state){
+	//reset the state
+	state.sort_phys = {};
+	state.phys = [];
+	state.words = [];
+	state.is_connectors = [];
 
-	//retrieve parameters
-	let m = parameters.obj_map;
-	let phys = parameters.phys;
-	let words = parameters.words;
-	let sort_phys = parameters.sort_phys;
-	let is_connectors = parameters.is_connectors;
+	//retrieve state
+	let m = state.obj_map;
+	let phys = state.phys;
+	let words = state.words;
+	let sort_phys = state.sort_phys;
+	let is_connectors = state.is_connectors;
 
 /*
 	sort_phys = {};
@@ -715,31 +715,31 @@ function isPhys(e){
 
 //get all functioning rules based on the IS connectors
 //function interpretRules(om, bm, is_connectors, rules, rule_objs, sort_phys, phys, words, p, am, w, u, s, k, n, o, uo, f){
-function interpretRules(parameters){
+function interpretRules(state){
 
 	//reset the rules (since a word object was changed)
-	parameters.rules = [];			
-	parameters.rule_objs = [];
+	state.rules = [];			
+	state.rule_objs = [];
 
-	//get all the paramaeters
-	let om = parameters['obj_map'];
-	let bm = parameters['back_map'];
-	let is_connectors = parameters['is_connectors'];
-	let rules = parameters['rules'];
-	let rule_objs = parameters['rule_objs'];
-	let sort_phys = parameters['sort_phys'];
-	let phys = parameters['phys'];
-	let words = parameters['words'];
-	let p = parameters['players'];
-	let am = parameters['auto_movers'];
-	let w = parameters['winnables'];
-	let u = parameters['pushables'];
-	let s = parameters['stoppables'];
-	let k = parameters['killers'];
-	let n = parameters['sinkers'];
-	let o = parameters['overlaps'];
-	let uo = parameters['unoverlaps'];
-	let f = parameters['featured'];
+	//get all the stateaeters
+	let om = state['obj_map'];
+	let bm = state['back_map'];
+	let is_connectors = state['is_connectors'];
+	let rules = state['rules'];
+	let rule_objs = state['rule_objs'];
+	let sort_phys = state['sort_phys'];
+	let phys = state['phys'];
+	let words = state['words'];
+	let p = state['players'];
+	let am = state['auto_movers'];
+	let w = state['winnables'];
+	let u = state['pushables'];
+	let s = state['stoppables'];
+	let k = state['killers'];
+	let n = state['sinkers'];
+	let o = state['overlaps'];
+	let uo = state['unoverlaps'];
+	let f = state['featured'];
 
 
 	for(var i=0;i<is_connectors.length;i++){
@@ -788,7 +788,7 @@ function interpretRules(parameters){
 	transformation(om, bm, rules, sort_phys, phys);
 
 	//reset the objects
-	resetAll(parameters);
+	resetAll(state);
 }
 
 /// OBJECT RULE ASSINGMENT ///
@@ -813,14 +813,14 @@ function clearLevel(){
 }
 */
 
-function clearLevel(parameters){
-	let props = Object.keys(parameters);
+function clearLevel(state){
+	let props = Object.keys(state);
 	for(let a=0;a<props.length;a++){
-		let entry = parameters[props[a]];
+		let entry = state[props[a]];
 		if(Array.isArray(entry))
-			parameters[props[a]] = [];
+			state[props[a]] = [];
 		else
-			parameters[props[a]] = {};
+			state[props[a]] = {};
 	}
 }
 
@@ -843,46 +843,46 @@ function resetObjProps(phys){
 }
 
 //function resetAll(bm, om, rules, sort_phys, phys, words, p, am, w, u, s, k, n, o, uo, f){
-function resetAll(parameters){
+function resetAll(state){
 	/*
-	//get all the paramaeters
-	let om = parameters['obj_map'];
-	let bm = parameters['back_map'];
-	let rules = parameters['rules'];
-	let sort_phys = parameters['sort_phys'];
-	let phys = parameters['phys'];
-	let words = parameters['words'];
-	let p = parameters['players'];
-	let am = parameters['auto_movers'];
-	let w = parameters['winnables'];
-	let u = parameters['pushables'];
-	let s = parameters['stoppables'];
-	let k = parameters['killers'];
-	let n = parameters['sinkers'];
-	let o = parameters['overlaps'];
-	let uo = parameters['unoverlaps'];
-	let f = parameters['featured'];
+	//get all the stateaeters
+	let om = state['obj_map'];
+	let bm = state['back_map'];
+	let rules = state['rules'];
+	let sort_phys = state['sort_phys'];
+	let phys = state['phys'];
+	let words = state['words'];
+	let p = state['players'];
+	let am = state['auto_movers'];
+	let w = state['winnables'];
+	let u = state['pushables'];
+	let s = state['stoppables'];
+	let k = state['killers'];
+	let n = state['sinkers'];
+	let o = state['overlaps'];
+	let uo = state['unoverlaps'];
+	let f = state['featured'];
 	*/
 
 	//reset the objects
-	resetObjProps(parameters.phys);
-	setPlayers(parameters);
-	setAutoMovers(parameters);
-	setWins(parameters);
-	setPushes(parameters);
-	setStops(parameters);
-	setKills(parameters);
-	setSinks(parameters);
-	setOverlaps(parameters);
-	setFeatures(parameters);
+	resetObjProps(state.phys);
+	setPlayers(state);
+	setAutoMovers(state);
+	setWins(state);
+	setPushes(state);
+	setStops(state);
+	setKills(state);
+	setSinks(state);
+	setOverlaps(state);
+	setFeatures(state);
 }
 
 //set the player objects
-function setPlayers(parameters){
-	parameters['players'] = [];
-	let players = parameters['players'];
-	let rules = parameters['rules'];
-	let sort_phys = parameters['sort_phys'];
+function setPlayers(state){
+	state['players'] = [];
+	let players = state['players'];
+	let rules = state['rules'];
+	let sort_phys = state['sort_phys'];
 
 	for(var r=0;r<rules.length;r++){
 		if(rules[r].includes("you")){
@@ -897,11 +897,11 @@ function setPlayers(parameters){
 }
 
 //set the autonomously moving objects
-function setAutoMovers(parameters){
-	parameters['auto_movers'] = [];
-	let automovers = parameters['auto_movers'];
-	let rules = parameters['rules'];
-	let sort_phys = parameters['sort_phys'];
+function setAutoMovers(state){
+	state['auto_movers'] = [];
+	let automovers = state['auto_movers'];
+	let rules = state['rules'];
+	let sort_phys = state['sort_phys'];
 
 	for(var r=0;r<rules.length;r++){
 		if(rules[r].includes("move")){
@@ -921,11 +921,11 @@ function setAutoMovers(parameters){
 
 //set the winning objects
 //function setWins(winnables, rules, sort_phys){
-function setWins(parameters){
-	parameters['winnables'] = [];
-	let winnables = parameters['winnables'];
-	let rules = parameters['rules'];
-	let sort_phys = parameters['sort_phys'];
+function setWins(state){
+	state['winnables'] = [];
+	let winnables = state['winnables'];
+	let rules = state['rules'];
+	let sort_phys = state['sort_phys'];
 
 	for(var r=0;r<rules.length;r++){
 		if(rules[r].includes("win")){
@@ -935,11 +935,11 @@ function setWins(parameters){
 }
 
 //set the pushable objects
-function setPushes(parameters){
-	parameters['pushables'] = [];
-	let pushables = parameters['pushables'];
-	let rules = parameters['rules'];
-	let sort_phys = parameters['sort_phys'];
+function setPushes(state){
+	state['pushables'] = [];
+	let pushables = state['pushables'];
+	let rules = state['rules'];
+	let sort_phys = state['sort_phys'];
 
 	for(var r=0;r<rules.length;r++){
 		if(rules[r].includes("push")){
@@ -954,11 +954,11 @@ function setPushes(parameters){
 }
 
 //set the stopping objects
-function setStops(parameters){
-	parameters['stoppables'] = [];
-	let stoppables = parameters['stoppables'];
-	let rules = parameters['rules'];
-	let sort_phys = parameters['sort_phys'];
+function setStops(state){
+	state['stoppables'] = [];
+	let stoppables = state['stoppables'];
+	let rules = state['rules'];
+	let sort_phys = state['sort_phys'];
 
 	for(var r=0;r<rules.length;r++){
 		if(rules[r].includes("stop")){
@@ -973,11 +973,11 @@ function setStops(parameters){
 }
 
 //set the killable objects
-function setKills(parameters){
-	parameters['killers'] = [];
-	let killers = parameters['killers'];
-	let rules = parameters['rules'];
-	let sort_phys = parameters['sort_phys'];
+function setKills(state){
+	state['killers'] = [];
+	let killers = state['killers'];
+	let rules = state['rules'];
+	let sort_phys = state['sort_phys'];
 
 	for(var r=0;r<rules.length;r++){
 		if(rules[r].includes("kill") || rules[r].includes("sink")){
@@ -986,11 +986,11 @@ function setKills(parameters){
 	}
 }
 
-function setSinks(parameters){
-	parameters['sinkers'] = [];
-	let sinkers = parameters['sinkers'];
-	let rules = parameters['rules'];
-	let sort_phys = parameters['sort_phys'];
+function setSinks(state){
+	state['sinkers'] = [];
+	let sinkers = state['sinkers'];
+	let rules = state['rules'];
+	let sort_phys = state['sort_phys'];
 
 	for(var r=0;r<rules.length;r++){
 		if(rules[r].includes("sink")){
@@ -1001,17 +1001,17 @@ function setSinks(parameters){
 
 //objects that are unmovable but not stoppable
 //function setOverlaps(bm, om, overlaps, unoverlaps, rules, phys, words){
-function setOverlaps(parameters){
-	parameters['overlaps'] = [];
-	parameters['unoverlaps'] = [];
+function setOverlaps(state){
+	state['overlaps'] = [];
+	state['unoverlaps'] = [];
 
-	let bm = parameters['back_map'];
-	let om = parameters['obj_map'];
-	let overlaps = parameters['overlaps'];
-	let unoverlaps = parameters['unoverlaps'];
-	let rules = parameters['rules'];
-	let phys = parameters['phys'];
-	let words = parameters['words'];
+	let bm = state['back_map'];
+	let om = state['obj_map'];
+	let overlaps = state['overlaps'];
+	let unoverlaps = state['unoverlaps'];
+	let rules = state['rules'];
+	let phys = state['phys'];
+	let words = state['words'];
 
 	for(var o=0;o<phys.length;o++){
 		var p = phys[o];
@@ -1064,11 +1064,11 @@ function drowned(phys, sinkers){
 	return dead;
 }
 
-function destroyObjs(dead, parameters){
-	let bm = parameters['back_map'];
-	let om = parameters['obj_map'];
-	let phys = parameters['phys'];
-	let sort_phys = parameters['sort_phys']
+function destroyObjs(dead, state){
+	let bm = state['back_map'];
+	let om = state['obj_map'];
+	let phys = state['phys'];
+	let sort_phys = state['sort_phys']
 
 	for(var k=0;k<dead.length;k++){
 		//remove reference of the player and the murder object
@@ -1086,7 +1086,7 @@ function destroyObjs(dead, parameters){
 
 	//reset the objects
 	if(dead.length > 0)
-		resetAll(parameters);
+		resetAll(state);
 }
 
 //check if the player has entered a win state
@@ -1157,11 +1157,11 @@ function changeSprite(o, w, om, bm, phys, sort_phys){
 
 //adds a feature to word groups based on ruleset
 //function setFeatures(featured, rules, sort_phys){
-function setFeatures(parameters){
-	parameters['featured'] = {};
-	let featured = parameters['featured'];
-	let rules = parameters['rules'];
-	let sort_phys = parameters['sort_phys'];
+function setFeatures(state){
+	state['featured'] = {};
+	let featured = state['featured'];
+	let rules = state['rules'];
+	let sort_phys = state['sort_phys'];
 
 	//add a feature to the sprites (x-is-y == x has y feature)
 	for(var r=0;r<rules.length;r++){
@@ -1230,26 +1230,26 @@ function badFeats(featured, sort_phys){
 
 
 
-// parameters and properties for the level/game 
-let game_parameters = {};
-game_parameters['orig_map'] = []
-game_parameters['obj_map'] = []
-game_parameters['back_map'] = []
-game_parameters['words'] = [];
-game_parameters['phys'] = [];
-game_parameters['is_connectors'] = [];
-game_parameters['sort_phys'] = {};
-game_parameters['rules'] = [];
-game_parameters['rule_objs'] = [];
-game_parameters['players'] = [];
-game_parameters['auto_movers'] = [];
-game_parameters['winnables'] = [];
-game_parameters['pushables'] = [];
-game_parameters['killers'] = [];
-game_parameters['sinkers'] = [];
-game_parameters['featured'] = {};
-game_parameters['overlaps'] = [];
-game_parameters['unoverlaps'] = [];
+// state and properties for the level/game 
+let game_state = {};
+game_state['orig_map'] = []
+game_state['obj_map'] = []
+game_state['back_map'] = []
+game_state['words'] = [];
+game_state['phys'] = [];
+game_state['is_connectors'] = [];
+game_state['sort_phys'] = {};
+game_state['rules'] = [];
+game_state['rule_objs'] = [];
+game_state['players'] = [];
+game_state['auto_movers'] = [];
+game_state['winnables'] = [];
+game_state['pushables'] = [];
+game_state['killers'] = [];
+game_state['sinkers'] = [];
+game_state['featured'] = {};
+game_state['overlaps'] = [];
+game_state['unoverlaps'] = [];
 
 
 var orig_map = [];
@@ -1305,21 +1305,21 @@ function nextMove(nextDir){
 
 	//if directional move, move the players
 	if(nextDir != "")
-		movePlayers(nextDir, moved_objects, game_parameters);
+		movePlayers(nextDir, moved_objects, game_state);
 
 	//move the movers (i.e. X-is-MOVE objects)
-	moveAutoMovers(moved_objects, game_parameters);
+	moveAutoMovers(moved_objects, game_state);
 
 	//update the rule set if this object is a rule
 	for(var m=0;m<moved_objects.length;m++){
 		//if(inArr(rule_objs, movedObjs[m]))
 		if(moved_objects[m].type == "word"){
-			interpretRules(game_parameters);
+			interpretRules(game_state);
 		}
 	}
 
 	//check if the game has been won
-	wonGame = win(game_parameters['players'],game_parameters['winnables']);
+	wonGame = win(game_state['players'],game_state['winnables']);
 	if(wonGame){
 		drawWin();
 		endRules = getCurRules();
@@ -1473,16 +1473,16 @@ function moveObjMerge(o, dir, om, bm, movedObjs, p, u, phys, sort_phys){
 }
 
 // MOVES ALL PLAYER OBJECTS
-function movePlayers(dir, mo, parameters){
-	let om = parameters['obj_map'];
-	let bm = parameters['back_map'];
-	let players = parameters['players'];
-	let pushs = parameters['pushables'];
-	let phys = parameters['phys'];
-	let sort_phys = parameters['sort_phys'];
-	let killers = parameters['killers'];
-	let sinkers = parameters['sinkers'];
-	let featured = parameters['featured'];
+function movePlayers(dir, mo, state){
+	let om = state['obj_map'];
+	let bm = state['back_map'];
+	let players = state['players'];
+	let pushs = state['pushables'];
+	let phys = state['phys'];
+	let sort_phys = state['sort_phys'];
+	let killers = state['killers'];
+	let sinkers = state['sinkers'];
+	let featured = state['featured'];
 
 
 	for(var p=0;p<players.length;p++){
@@ -1493,23 +1493,23 @@ function movePlayers(dir, mo, parameters){
 	}
 
 	//check for kill condition
-	destroyObjs(killed(players, killers), parameters);
-	destroyObjs(drowned(phys, sinkers), parameters);
-	destroyObjs(badFeats(featured, sort_phys), parameters);
+	destroyObjs(killed(players, killers), state);
+	destroyObjs(drowned(phys, sinkers), state);
+	destroyObjs(badFeats(featured, sort_phys), state);
 }
 
 // MOVES ALL NPC (MOVER) OBJECTS
-function moveAutoMovers(mo, parameters){
-	let automovers = parameters['auto_movers'];
-	let om = parameters['obj_map'];
-	let bm = parameters['back_map'];
-	let players = parameters['players'];
-	let pushs = parameters['pushables'];
-	let phys = parameters['phys'];
-	let sort_phys = parameters['sort_phys'];
-	let killers = parameters['killers'];
-	let sinkers = parameters['sinkers'];
-	let featured = parameters['featured'];
+function moveAutoMovers(mo, state){
+	let automovers = state['auto_movers'];
+	let om = state['obj_map'];
+	let bm = state['back_map'];
+	let players = state['players'];
+	let pushs = state['pushables'];
+	let phys = state['phys'];
+	let sort_phys = state['sort_phys'];
+	let killers = state['killers'];
+	let sinkers = state['sinkers'];
+	let featured = state['featured'];
 
 	for(var a=0;a<automovers.length;a++){
 		var curAuto = automovers[a];
@@ -1520,9 +1520,9 @@ function moveAutoMovers(mo, parameters){
 	}
 
 	//check for kill condition
-	destroyObjs(killed(players, killers), parameters);
-	destroyObjs(drowned(phys, sinkers), parameters);
-	destroyObjs(badFeats(featured, sort_phys), parameters);
+	destroyObjs(killed(players, killers), state);
+	destroyObjs(drowned(phys, sinkers), state);
+	destroyObjs(badFeats(featured, sort_phys), state);
 }
 
 
@@ -1540,27 +1540,27 @@ function initDemo(lvl){
 
 // CREATES A DEMO LEVEL
 function newDemoLevel(lvl_index){
-	clearLevel(game_parameters);
+	clearLevel(game_state);
 	demo = true;
 
-	game_parameters['orig_map'] = demoLevels[lvl_index];
+	game_state['orig_map'] = demoLevels[lvl_index];
 	setLevel();
 }
 
 // MAKES A LEVEL FROM AN ASCII MAP
 function makeLevel(map){
-	clearLevel(game_parameters);
+	clearLevel(game_state);
 	demo = false;
 
-	game_parameters['orig_map'] = map;
+	game_state['orig_map'] = map;
 	setLevel();
 }
 
 // GET THE RULES THAT ARE CURRENTLY ACTIVE
 function getCurRules(){
 	ruleset = [];
-	for(let r=0;r<game_parameters['rules'].length;r++){
-		ruleset.push(game_parameters['rules'][r]);
+	for(let r=0;r<game_state['rules'].length;r++){
+		ruleset.push(game_state['rules'][r]);
 	}
 	return ruleset;
 }
@@ -1568,12 +1568,12 @@ function getCurRules(){
 // INITIALIZE THE SAVED LEVEL 
 function setLevel(){
 
-	var maps = splitMap(game_parameters['orig_map']);
-	game_parameters['back_map'] = maps[0]
-	game_parameters['obj_map'] = maps[1];
+	var maps = splitMap(game_state['orig_map']);
+	game_state['back_map'] = maps[0]
+	game_state['obj_map'] = maps[1];
 
-	assignMapObjs(game_parameters);
-	interpretRules(game_parameters);
+	assignMapObjs(game_state);
+	interpretRules(game_state);
 
 	endRules = [];
 	initRules = getCurRules();
@@ -1626,7 +1626,7 @@ function minimizeSolution(solution){
 
 function level2JSON(lvl=null, ID=0, name="", author="Baba"){
 	if(lvl == null){
-		lvl = game_parameters["orig_map"];
+		lvl = game_state["orig_map"];
 	}
 
 	let jsonLevel = {};
@@ -1642,16 +1642,16 @@ function level2JSON(lvl=null, ID=0, name="", author="Baba"){
 
 module.exports = {
 	setupLevel : function(m) {makeLevel(m);},
-	getGameParam : function(){ return game_parameters;},
-	clearLevel : function(param){clearLevel(param);},
+	getGamestate : function(){ return game_state;},
+	clearLevel : function(state){clearLevel(state);},
 
 	parseMap : function(m) { return parseMap(m);},
 	map2Str : function(m){return map2Str(m);},
 	doubleMap2Str: function(om, bm){return doubleMap2Str(om, bm)},
 	splitMap : function(m){return splitMap(m)},
 
-	assignMapObjs : function (param){assignMapObjs(param)},
-	interpretRules : function (param){interpretRules(param)},
+	assignMapObjs : function (state){assignMapObjs(state)},
+	interpretRules : function (state){interpretRules(state)},
 	win: function(p,w){return win(p,w)},
 
 	movePlayers : function(d, m, p){movePlayers(d,m,p)},

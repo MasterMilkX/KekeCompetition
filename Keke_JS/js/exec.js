@@ -13,11 +13,10 @@ var simjs = require('./simulation')
 function run_keke(ascii_level, iterations){
 	//setup state
 	simjs.setupLevel(simjs.parseMap(ascii_level));
-	let gp = simjs.getGameParam();
+	let gp = simjs.getGamestate();
 
 	//setup solver
-	kekejs.resetQueue();
-	kekejs.initQueue(gp);
+	kekejs.init(gp);
 
 	console.log("Solving...");
 
