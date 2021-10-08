@@ -9,10 +9,27 @@ function importLevelSets(){
 
 // PARSE THE JSON FORMAT OF THE LEVELS 
 function importLevels(lvlsetJSON){
-	let path = 'json_levels/'+lvlsetJSON;
+	let path = 'json_levels/'+lvlsetJSON+".json";
 	let j = fs.readFileSync(path);
 	let lvlset = JSON.parse(j);
 	return lvlset.levels;
+}
+
+
+// IMPORT THE SET OF LEVELS BY NAME
+function getLevelSet(name){
+	return importLevels(name);
+}
+
+// IMPORT THE LEVEL BY ITS ID NUMBER
+function getLevelObj(ls, id){
+	for(let l=0;l<ls.length;l++){
+		let lvl = ls[l];
+		if (lvl.id == id){
+			return lvl;
+		}
+	}
+	return null;
 }
 
 // MAIN FUNCTION TO RUN THE CODE
@@ -27,6 +44,8 @@ function main(){
 
 module.exports = {
 	importLevelSets : function(){return importLevelSets();},
-	importLevels : function(j){return importLevels(j);}
+	importLevels : function(j){return importLevels(j);},
+	getLevelSet : function(n){return getLevelSet(n);},
+	getLevel : function(ls,i){return getLevelObj(ls,i);}
 
 }

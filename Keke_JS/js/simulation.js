@@ -1594,7 +1594,7 @@ function setLevel(){
 
 // TRANSLATE THE SOLUTION'S UDLR SYNTAX TO MOVEMENT FOR KEKE
 function translateSol(solStr){
-	let parts = solStr.split("");
+	let parts = solStr.toUpperCase().split("");
 	let solution = [];
 	for(let p=0;p<parts.length;p++){
 		let a = parts[p];
@@ -1641,17 +1641,23 @@ function level2JSON(lvl=null, ID=0, name="", author="Baba"){
 
 
 module.exports = {
-	parseMap : function(m) { return parseMap(m);},
 	setupLevel : function(m) {makeLevel(m);},
 	getGameParam : function(){ return game_parameters;},
+	clearLevel : function(param){clearLevel(param);},
+
+	parseMap : function(m) { return parseMap(m);},
 	map2Str : function(m){return map2Str(m);},
 	doubleMap2Str: function(om, bm){return doubleMap2Str(om, bm)},
-	clearLevel : function(param){clearLevel(param);},
 	splitMap : function(m){return splitMap(m)},
+
 	assignMapObjs : function (param){assignMapObjs(param)},
 	interpretRules : function (param){interpretRules(param)},
+	win: function(p,w){return win(p,w)},
+
 	movePlayers : function(d, m, p){movePlayers(d,m,p)},
 	moveAutoMovers: function(m, p){moveAutoMovers(m,p)},
-	win: function(p,w){return win(p,w)}
+
+	miniSol : function(s){return minimizeSolution(s);},
+	transSol : function(s){return translateSol(s);}
 }
 

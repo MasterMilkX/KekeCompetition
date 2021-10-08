@@ -128,7 +128,7 @@ function iterSolve(init_parameters){
 		stateSet.push(children[c][1].mapRep);
 		//console.log(children[c].mapRep);
 		if(children[c][1].win){
-			return children[c][1].actionSet;
+			return simjs.miniSol(children[c][1].actionSet);
 		}
 	}
 
