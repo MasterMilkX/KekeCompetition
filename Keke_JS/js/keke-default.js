@@ -2,6 +2,12 @@
 // Version 2.0
 // Code by Milk 
 
+
+//get imports (NODEJS)
+var simjs = require('./simulation')
+
+
+
 let possActions = ["", "right", "up", "left", "down"];
 let stateSet = [];
 
@@ -67,17 +73,16 @@ function deepCopyObject(obj){
 
 // CREATE NEW GAME STATE PARAMETERS AND RESET THE MAP PROPERTIES
 function newParameters(keke_parameters, m){
-	clearLevel(keke_parameters);
+	simjs.clearLevel(keke_parameters);
 
 	keke_parameters['orig_map'] = m;
-	makeImgHash();
 
-	var maps = splitMap(keke_parameters['orig_map']);
+	var maps = simjs.splitMap(keke_parameters['orig_map']);
 	keke_parameters['back_map'] = maps[0]
 	keke_parameters['obj_map'] = maps[1];
 	
-	assignMapObjs(keke_parameters);
-	interpretRules(keke_parameters);
+	simjs.assignMapObjs(keke_parameters);
+	simjs.interpretRules(keke_parameters);
 }
 
 
@@ -88,20 +93,13 @@ function solve(init_parameters, callback){
 	//console.log(parameters.sort_phys);
 
 	//loop until the limit is reached
-	curIteration = 0;
-	stateSet = [];
-
-	//create the initial node
-	let master_node = new node(map2Str(init_parameters['orig_map']), [], null, false, false);
-	queue = [[0, master_node]];
+	initQueue(init_parameters);
 
 	ot = setInterval(function(){
 		let solution = iterSolve(init_parameters);
 
 		//found the solution!
 		if(solution.length > 0){
-			console.log("got em!")
-			console.log(solution)
 			clearInterval(ot);
 			ot = 0;
 			callback(solution);
@@ -109,7 +107,6 @@ function solve(init_parameters, callback){
 
 		//if end of queue or max iterations
 		if(queue.length < 1 || curIteration >= MAX_ITER){
-			console.log("end of the line")
 			clearInterval(ot);
 			ot = 0;
 			callback([]);
@@ -123,13 +120,7 @@ function iterSolve(init_parameters){
 	if(queue.length < 1 || curIteration >= MAX_ITER)
 		return [];
 
-	//console.log(queue);
 	let curnode = queue.shift()[1];
-
-	if(curIteration % 1000 == 0){
-		console.log(stateSet);
-	}
-
 	children = getChildren(init_parameters['orig_map'], curnode);
 
 	//check if golden child was found
@@ -137,7 +128,6 @@ function iterSolve(init_parameters){
 		stateSet.push(children[c][1].mapRep);
 		//console.log(children[c].mapRep);
 		if(children[c][1].win){
-			console.log(curIteration + "/" + MAX_ITER);
 			return children[c][1].actionSet;
 		}
 	}
@@ -189,19 +179,19 @@ function getNextState(dir, new_kk_p, parent){
 		let moved_objects = [];
 
 		if(newActions[a] != "")
-			movePlayers(newActions[a], moved_objects, new_kk_p);
+			simjs.movePlayers(newActions[a], moved_objects, new_kk_p);
 			
 		//move any npcs
-		moveAutoMovers(moved_objects, new_kk_p);
+		simjs.moveAutoMovers(moved_objects, new_kk_p);
 
 		//update the rule set if this object is a rule
 		for(var m=0;m<moved_objects.length;m++){
 			if(moved_objects[m].type == "word"){
-				interpretRules(new_kk_p);
+				simjs.interpretRules(new_kk_p);
 			}
 		}
 
-		didwin = win(new_kk_p['players'], new_kk_p['winnables']);
+		didwin = simjs.win(new_kk_p['players'], new_kk_p['winnables']);
 
 		if(new_kk_p['players'].length == 0){
 			break;
@@ -217,7 +207,7 @@ function getNextState(dir, new_kk_p, parent){
 	//console.log("after KEKE (" + newActions + "): \n" + doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map));
 
 
-	return [(win_d+word_d+push_d)/3, new node(doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map), newActions, parent, didwin, (new_kk_p['players'].length == 0))]
+	return [(win_d+word_d+push_d)/3, new node(simjs.doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map), newActions, parent, didwin, (new_kk_p['players'].length == 0))]
 }
 
 
@@ -247,9 +237,22 @@ function dist(a,b){
 function getIterRatio(){return curIteration + " / " + MAX_ITER;}
 
 
+function initQueue(param){
+	//loop until the limit is reached
+	curIteration = 0;
+	stateSet = [];
 
-
-module.exports = {
-	solve = (init_param) => {iterSolve(init_param)}
+	//create the initial node
+	let master_node = new node(simjs.map2Str(param['orig_map']), [], null, false, false);
+	queue = [[0, master_node]];
 }
+
+
+//visible function for other JS files (NODEJS)
+module.exports = {
+	resetQueue : function(){queue = [];},
+	step : function(init_param){return iterSolve(init_param)},
+	initQueue : function(init_param){initQueue(init_param);}
+}
+
 

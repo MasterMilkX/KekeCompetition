@@ -1,3 +1,25 @@
+// SIMULATION.JS - BABA IS Y'ALL LEVEL PLAYER (NO GUI)
+// INCLUDES GAME.JS AND BABA.JS CODE
+// VERSION 1.0
+// Code by Milk
+
+
+
+
+
+
+//////////////////////////////          BABA.JS          //////////////////////////////////
+
+
+
+
+
+/* global map_key */
+/* global demoLevels */
+/* global oppDir */
+
+
+
 //Baba is Y'all mechanic/rule base
 //Version: 2.0
 //Code by Milk 
@@ -39,8 +61,6 @@ map_key['G'] = "goop_word";
 map_key['0'] = "sink_word";
 map_key['v'] = "love_obj";
 map_key['V'] = "love_word";
-
-var imgHash = {}
 
 var features = ["hot", "melt", "open", "shut", "move"];
 var featPairs = [["hot", "melt"], ["open", "shut"]];
@@ -463,24 +483,22 @@ oppDir["up"] = "down";
 oppDir["down"] = "up";
 
 
-function phys_obj(name, img, x, y){
+function phys_obj(name, x, y){
 	this.type = "phys";
 	this.name = name;
 	this.x = x;
 	this.y = y;
-	this.img = img;
 	this.is_movable = false;
 	this.is_stopped = false;
 	this.feature = "";
 	this.dir = "";
 }
 
-function word_obj(name, img, obj,x,y){
+function word_obj(name, obj,x,y){
 	this.type = "word";
 	this.name = name;
 	this.x = x;
 	this.y = y;
-	this.img = img;
 	this.obj = obj;
 	this.is_movable = true;
 	this.is_stopped = false;
@@ -488,56 +506,12 @@ function word_obj(name, img, obj,x,y){
 
 ///////////////    GAME SPECIFIC FUNCTIONS   //////////////
 
-//get all of the characters for a given level map and assign store their character images
-function makeImgHash(){
 
-	//iterate through each character
-	var chars = Object.keys(map_key);
-	for(var r=0;r<chars.length;r++){
-			var charac = chars[r];
-			//character not yet saved in the image hash - so make a new entry
-			if(!(charac in imgHash)){
-				var i = new Image();
-				i.src = "img/" + map_key[charac] + ".png";
-				var ir = false;
-				i.onload = function(){ir = true;};
-				var i_arr = [i, ir];
-				imgHash[charac] = i_arr;
-			}
-		
-	}
-}
 
 function reverseChar(val){
 	return Object.keys(map_key).find(key => map_key[key] === (val));
 }
 
-//check if all of the characters for the map are image ready
-function mapReady(){
-	makeImgHash();
-	var allChars = Object.keys(map_key);
-	
-	//iterate through each character
-	for(var r=0;r<allChars.length;r++){
-			var charac = allChars[r];
-			var img = imgHash[charac];
-
-			if(img == undefined){
-				console.log("something is wrong: " + charac)
-				return false;
-			}
-
-			if(!img[1]){
-				img[0].onload = function(){img[1] = true};
-				if(img[0].width !== 0)
-					img[1] = true;
-				else
-					return false;
-			}
-		
-	}
-	return true;
-}
 
 //assign the sprite objects to actual objects
 //function assignMapObjs(m, phys, words, sort_phys, is_connectors){
@@ -576,7 +550,7 @@ function assignMapObjs(parameters){
 
 			//word-based object
 			if(map_key[charac].includes("word")){
-				var w = new word_obj(base_obj, imgHash[charac][0], undefined, c,r);
+				var w = new word_obj(base_obj, undefined, c,r);
 
 				//add the base object to the word representation if it exists
 				if(Object.values(map_key).indexOf((base_obj+"_obj")) != -1){
@@ -595,7 +569,7 @@ function assignMapObjs(parameters){
 			}
 			//physical-based object
 			else if(map_key[charac].includes("obj")){
-				var o = new phys_obj(base_obj, imgHash[charac][0], c, r);
+				var o = new phys_obj(base_obj, c, r);
 
 				phys.push(o);
 
@@ -1161,7 +1135,7 @@ function isObjWord(w){
 //changes a sprite from one thing to another
 function changeSprite(o, w, om, bm, phys, sort_phys){
 	var charac = reverseChar(w+"_obj");
-	var o2 = new phys_obj(w, imgHash[charac][0], o.x, o.y);
+	var o2 = new phys_obj(w, o.x, o.y);
 	phys.push(o2);		//in with the new...
 	
 	//replace object on obj_map/back_map
@@ -1250,5 +1224,434 @@ function badFeats(featured, sort_phys){
 
 
 
+//////////////////////////////          GAME.JS          //////////////////////////////////
 
-module.exports.parseMap = (m) => { return parseMap(m);};
+
+
+
+
+// parameters and properties for the level/game 
+let game_parameters = {};
+game_parameters['orig_map'] = []
+game_parameters['obj_map'] = []
+game_parameters['back_map'] = []
+game_parameters['words'] = [];
+game_parameters['phys'] = [];
+game_parameters['is_connectors'] = [];
+game_parameters['sort_phys'] = {};
+game_parameters['rules'] = [];
+game_parameters['rule_objs'] = [];
+game_parameters['players'] = [];
+game_parameters['auto_movers'] = [];
+game_parameters['winnables'] = [];
+game_parameters['pushables'] = [];
+game_parameters['killers'] = [];
+game_parameters['sinkers'] = [];
+game_parameters['featured'] = {};
+game_parameters['overlaps'] = [];
+game_parameters['unoverlaps'] = [];
+
+
+var orig_map = [];
+var back_map = [];
+var obj_map = [];
+var mapAllReady = false;
+var curLevel = 0;
+var demo = false;
+
+//sprites
+var moved = false;
+var acted = false;
+var movedObjs = [];
+
+
+var moveSteps = [];
+var initRules = [];
+var endRules = [];
+ 
+
+
+var wonGame = false;
+var saveLevel = false;
+var demoGame = false;
+
+var aiControl = false;
+var curPath = [];
+var pathIndex = 0;
+var solving = false;
+var unsolvable = false;
+
+
+//////////////////    GENERIC FUNCTIONS   ///////////////
+
+
+//checks if an element is in an array
+function inArr(arr, e){
+	if(arr.length == 0)
+		return false;
+	return arr.indexOf(e) !== -1
+}
+
+
+////////////////   KEYBOARD FUNCTIONS  //////////////////
+
+
+
+// GOTO THE NEXT DIRECTIONAL POINT IN THE SOLUTION STEP
+function nextMove(nextDir){
+	//reset
+	var moved_objects = [];
+	moved = false;
+
+	//if directional move, move the players
+	if(nextDir != "")
+		movePlayers(nextDir, moved_objects, game_parameters);
+
+	//move the movers (i.e. X-is-MOVE objects)
+	moveAutoMovers(moved_objects, game_parameters);
+
+	//update the rule set if this object is a rule
+	for(var m=0;m<moved_objects.length;m++){
+		//if(inArr(rule_objs, movedObjs[m]))
+		if(moved_objects[m].type == "word"){
+			interpretRules(game_parameters);
+		}
+	}
+
+	//check if the game has been won
+	wonGame = win(game_parameters['players'],game_parameters['winnables']);
+	if(wonGame){
+		drawWin();
+		endRules = getCurRules();
+	}
+
+	
+	pathIndex++;
+	moved = true;
+}
+
+
+
+// CHECK IF AN OBJECT IS MOVABLE
+function canMove(e, dir, om, bm, movedObjs, p, u, phys, sort_phys){	//p=players, u=pushables
+	if(movedObjs.indexOf(e) != -1)
+		return false;
+
+	//check validity of object
+	if(e == " ") //blank spot
+		return false;
+	if(!e.is_movable)		//cannot move
+		return false;
+
+	var o = ' ';
+
+	//determine direction
+	if(dir == "up"){
+		//check map placement first	
+		if(e.y-1 < 0)						//oob
+			return false;
+		if(bm[e.y-1][e.x] == '_')		//border
+			return false;
+
+		o = om[e.y-1][e.x];		//assign adjacent object
+	}else if(dir == "down"){
+		//check map placement first	
+		if(e.y+1 >= bm.length)		//oob
+			return false;
+		if(bm[e.y+1][e.x] == '_')		//border
+			return false;
+
+		o = om[e.y+1][e.x];		//assign adjacent object
+	}else if(dir == "left"){
+		//check map placement first	
+		if(e.x-1 < 0)						//oob
+			return false;
+		if(bm[e.y][e.x-1] == '_')		//border
+			return false;
+
+		o = om[e.y][e.x-1];		//assign adjacent object
+	}else if(dir == "right"){
+		//check map placement first	
+		if(e.x+1 >= bm[0].length)		//oob
+			return false;
+		if(bm[e.y][e.x+1] == '_')		//border
+			return false;
+
+		o = om[e.y][e.x+1];		//assign adjacent object
+	}
+
+
+
+	//check the adjacent object
+	if(o == ' ')		//empty space so movable
+		return true;
+	if(o.is_stopped)	//immovable object above it
+		return false;
+	if(o.is_movable){	//move the object next to it
+		//console.log(p.indexOf(o) != -1);
+		//console.log(p);
+		//console.log(o)
+
+		if(o.is_movable && u.indexOf(o) != -1)									//pushables
+			return moveObj(o, dir, om, bm, movedObjs, p, u);
+		else if(p.indexOf(o) != -1 && p.indexOf(e) == -1)							//player
+			return true;
+		else if((o.type == "phys" && (u.length == 0 || u.indexOf(o) == -1)))		//movable but not pushable
+			return false;
+		else if((e.is_movable || o.is_movable) && (e.type == "phys" && o.type == "phys"))	//automover
+			return true;
+		else if((e.name == o.name) && (p.indexOf(e) != -1) && (isPhys(o) && isPhys(e)))	//same type of entity = merge
+			return moveObjMerge(o, dir, om, bm, movedObjs, p, u, phys, sort_phys);
+		else{
+			return moveObj(o, dir, om, bm, movedObjs, p, u);
+		}
+		
+	}	
+		
+	if(!o.is_stopped && !o.is_movable)
+		return true;
+
+	//when in doubt move
+	return true;
+}
+
+// RECURSIVE STATEMENT TO ALLOW MOVEMENT
+function moveObj(o, dir, om, bm, movedObjs, p, u, phys, sort_phys){
+	//move
+	if(canMove(o, dir, om, bm, movedObjs, p, u, phys, sort_phys)){
+		//update the position
+		om[o.y][o.x] = ' ';
+		if(dir == "up")
+			o.y--;
+		else if(dir == "down")
+			o.y++;
+		else if(dir == "left")
+			o.x--;
+		else if(dir == "right")
+			o.x++;
+		om[o.y][o.x] = o;
+
+		movedObjs.push(o);
+		o.dir = dir;	//set the direction the object moved in
+
+		return true;
+	}
+	//blocked
+	else{
+		return false;
+	}
+}
+
+// RECURSIVE STATEMENT ALLOWING MOVEMENT FOR OBJECTS OF THE SAME TYPE
+function moveObjMerge(o, dir, om, bm, movedObjs, p, u, phys, sort_phys){
+	//move
+	if(canMove(o, dir, om, bm, movedObjs, p, u, phys, sort_phys)){
+		//update the position
+		om[o.y][o.x] = ' ';
+		if(dir == "up")
+			o.y--;
+		else if(dir == "down")
+			o.y++;
+		else if(dir == "left")
+			o.x--;
+		else if(dir == "right")
+			o.x++;
+		om[o.y][o.x] = o;
+
+		movedObjs.push(o);
+		o.dir = dir;	//set the direction the object moved in
+
+		return true;
+	}
+	//blocked (so allow the others to take over)
+	else{
+		om[o.y][o.x] = ' ';
+		//sort_phys[o.name].splice(sort_phys[o.name].indexOf(o), 1);
+		//phys.splice(o,1);
+		return true;
+	}
+}
+
+// MOVES ALL PLAYER OBJECTS
+function movePlayers(dir, mo, parameters){
+	let om = parameters['obj_map'];
+	let bm = parameters['back_map'];
+	let players = parameters['players'];
+	let pushs = parameters['pushables'];
+	let phys = parameters['phys'];
+	let sort_phys = parameters['sort_phys'];
+	let killers = parameters['killers'];
+	let sinkers = parameters['sinkers'];
+	let featured = parameters['featured'];
+
+
+	for(var p=0;p<players.length;p++){
+		var curPlayer = players[p];
+		//console.log(curPlayer.name + " (" + curPlayer.x + "," + curPlayer.y + ")");
+		moveObj(curPlayer,dir, om, bm, mo, players, pushs, phys, sort_phys);
+		//console.log(curPlayer.name + " (" + curPlayer.x + "," + curPlayer.y + ")");
+	}
+
+	//check for kill condition
+	destroyObjs(killed(players, killers), parameters);
+	destroyObjs(drowned(phys, sinkers), parameters);
+	destroyObjs(badFeats(featured, sort_phys), parameters);
+}
+
+// MOVES ALL NPC (MOVER) OBJECTS
+function moveAutoMovers(mo, parameters){
+	let automovers = parameters['auto_movers'];
+	let om = parameters['obj_map'];
+	let bm = parameters['back_map'];
+	let players = parameters['players'];
+	let pushs = parameters['pushables'];
+	let phys = parameters['phys'];
+	let sort_phys = parameters['sort_phys'];
+	let killers = parameters['killers'];
+	let sinkers = parameters['sinkers'];
+	let featured = parameters['featured'];
+
+	for(var a=0;a<automovers.length;a++){
+		var curAuto = automovers[a];
+		var m = moveObj(curAuto, curAuto.dir, om, bm, mo, players, pushs, phys, sort_phys);
+		if(!m){
+			curAuto.dir = oppDir[curAuto.dir];
+		}
+	}
+
+	//check for kill condition
+	destroyObjs(killed(players, killers), parameters);
+	destroyObjs(drowned(phys, sinkers), parameters);
+	destroyObjs(badFeats(featured, sort_phys), parameters);
+}
+
+
+
+
+
+//////////////   GAME LOOP FUNCTIONS   //////////////////
+
+// LOAD A DEMO LEVEL
+function initDemo(lvl){
+	demo = true;
+	curLevel = lvl;
+	newDemoLevel(curLevel);
+}
+
+// CREATES A DEMO LEVEL
+function newDemoLevel(lvl_index){
+	clearLevel(game_parameters);
+	demo = true;
+
+	game_parameters['orig_map'] = demoLevels[lvl_index];
+	setLevel();
+}
+
+// MAKES A LEVEL FROM AN ASCII MAP
+function makeLevel(map){
+	clearLevel(game_parameters);
+	demo = false;
+
+	game_parameters['orig_map'] = map;
+	setLevel();
+}
+
+// GET THE RULES THAT ARE CURRENTLY ACTIVE
+function getCurRules(){
+	ruleset = [];
+	for(let r=0;r<game_parameters['rules'].length;r++){
+		ruleset.push(game_parameters['rules'][r]);
+	}
+	return ruleset;
+}
+
+// INITIALIZE THE SAVED LEVEL 
+function setLevel(){
+
+	var maps = splitMap(game_parameters['orig_map']);
+	game_parameters['back_map'] = maps[0]
+	game_parameters['obj_map'] = maps[1];
+
+	assignMapObjs(game_parameters);
+	interpretRules(game_parameters);
+
+	endRules = [];
+	initRules = getCurRules();
+	
+
+	aiControl = false;
+	moved = false;
+	unsolvable = false;
+
+	saveLevel = false;
+
+	moveSteps = [];
+
+	wonGame = false;
+	alreadySolved = false;
+}
+
+
+// TRANSLATE THE SOLUTION'S UDLR SYNTAX TO MOVEMENT FOR KEKE
+function translateSol(solStr){
+	let parts = solStr.split("");
+	let solution = [];
+	for(let p=0;p<parts.length;p++){
+		let a = parts[p];
+		if(a == "U")
+			solution.push("up");
+		else if(a == "D")
+			solution.push("down");
+		else if(a == "L")
+			solution.push("left");
+		else if(a == "R")
+			solution.push("right");
+		else if(a == "S")
+			solution.push("");
+	}
+	return solution;
+}
+
+
+///////////////      EXPORTING FUNCTIONS      ///////////////
+
+
+function minimizeSolution(solution){
+	let miniSol = [];
+	for(let s=0;s<solution.length;s++){
+		miniSol.push(solution[s][0].toLowerCase());
+	}
+	return miniSol.join("");
+}
+
+function level2JSON(lvl=null, ID=0, name="", author="Baba"){
+	if(lvl == null){
+		lvl = game_parameters["orig_map"];
+	}
+
+	let jsonLevel = {};
+	jsonLevel.id = ID;
+	jsonLevel.name = name;
+	jsonLevel.author = author;
+	jsonLevel.ascii = map2Str(lvl);
+	jsonLevel.solution = minimizeSolution(moveSteps);
+
+	return JSON.stringify(jsonLevel);
+}
+
+
+module.exports = {
+	parseMap : function(m) { return parseMap(m);},
+	setupLevel : function(m) {makeLevel(m);},
+	getGameParam : function(){ return game_parameters;},
+	map2Str : function(m){return map2Str(m);},
+	doubleMap2Str: function(om, bm){return doubleMap2Str(om, bm)},
+	clearLevel : function(param){clearLevel(param);},
+	splitMap : function(m){return splitMap(m)},
+	assignMapObjs : function (param){assignMapObjs(param)},
+	interpretRules : function (param){interpretRules(param)},
+	movePlayers : function(d, m, p){movePlayers(d,m,p)},
+	moveAutoMovers: function(m, p){moveAutoMovers(m,p)},
+	win: function(p,w){return win(p,w)}
+}
+
