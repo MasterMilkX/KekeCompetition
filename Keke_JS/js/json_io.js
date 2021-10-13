@@ -1,20 +1,26 @@
-// LEVEL-SET.JS -- NODE.JS INTERFACE FOR IMPORTING LEVELS + REPORTS FROM JSON FILES
+// JSON_IO.JS -- NODE.JS INTERFACE FOR IMPORTING LEVELS + REPORTS FROM JSON FILES
 // Written by Milk
 // 10-8-21
 
 
 const fs = require('fs')
 
+
+/////////    LEVEL SET JSON I/O    //////////
+
+
 // IMPORT LEVEL SETS FROM THE JSON DIRECTORY
 function importLevelSets(){
 	const jsonDir = 'json_levels/'
-	jsonFiles = fs.readdirSync(jsonDir);
+	let jsonFiles = fs.readdirSync(jsonDir);
 	return jsonFiles;
 }	
 
 // PARSE THE JSON FORMAT OF THE LEVELS 
 function importLevels(lvlsetJSON){
 	let path = 'json_levels/'+lvlsetJSON+".json";
+	if (!fs.existsSync(path)){return null;}		//no level set found
+
 	let j = fs.readFileSync(path);
 	let lvlset = JSON.parse(j);
 	return lvlset.levels;
@@ -38,6 +44,43 @@ function getLevelObj(ls, id){
 }
 
 
+
+
+/////////    AGENT I/O    //////////
+
+// RETURNS A LIST OF POSSIBLE AGENTS TO USE
+function getAgentList(){
+	const agentDir = 'agents/';
+	let agentJS = fs.readdirSync(agentDir);
+	agentJS = agentJS.filter(x => x[0] != '.');
+	return agentJS;
+}
+
+// RETURN AGENT JSON REPORT [in form of object]
+function importAgentReport(agent){
+	let path = 'reports/'+agent+"_REPORT.json";
+
+	if (!fs.existsSync(filepath)){return null}
+
+	let j = fs.readFileSync(path);
+	let report = JSON.parse(j);
+	return report;
+}
+
+// RETURN AGENT JSON REPORT FOR SPECIFIC LEVEL SET [in form of object]
+function importAgentLevelSetReport(agent, lvlSet){
+	let r = importAgentReport(agent);
+	if(r == null){return null}	//no report made yet so just return the level set length
+
+
+	for(let i=0;i<r.length;i++){
+		let ls = r[i];
+		if (ls["levelSet"] == lvlSet){
+			return ls["levels"];
+		}
+	}
+	return null;
+}
 
 // EXPORT THE RESULT FROM SOLVING A LEVEL TO THE AGENT'S JSON FILE
 function exportAgentReport(file,ls,levelID,iterCt,timeTaken,sol){
@@ -90,7 +133,7 @@ function exportAgentReport(file,ls,levelID,iterCt,timeTaken,sol){
 			lsObj.levels.push(lvl);
 		} 
 		//update an old entry if newer is faster
-		else if(lvl.time > timeTaken){
+		else if((lvl.time > timeTaken) || (lvl.solution == "" && sol != "")){
 			lvl = {id: levelID, iterations: iterCt, time:timeTaken, solution:sol};
 			let lvlInd = lsObj.levels.map(o => o.id).indexOf(levelID);
 			lsObj.levels[lvlInd] = lvl;
@@ -117,21 +160,20 @@ function exportAgentReport(file,ls,levelID,iterCt,timeTaken,sol){
 }
 
 
-// MAIN FUNCTION TO RUN THE CODE
-function main(){
-	let levelSets = importLevelSets();
-	console.log(levelSets);
-	let levels = importLevels(levelSets[1]);
-	console.log(levels[0]);
-}
 
-//main();
+
 
 module.exports = {
+	//level set I/O
 	importLevelSets : function(){return importLevelSets();},
 	importLevels : function(j){return importLevels(j);},
 	getLevelSet : function(n){return getLevelSet(n);},
 	getLevel : function(ls,i){return getLevelObj(ls,i);},
+
+	//agent I/O
+	getAgentList : function(){return getAgentList();},
+	importAgentReport: function(a){return importAgentReport(a);},
+	importALSReport: function(a, l){return importAgentLevelSetReport(a, l);},
 	exportReport: function(f,ls,id,i,t,s){exportAgentReport(f,ls,id,i,t,s);}
 
 }

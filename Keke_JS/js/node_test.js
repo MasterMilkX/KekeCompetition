@@ -45,4 +45,10 @@ function test2(){
 	});
 }
 
-test2();
+
+function test3(){
+	
+}
+
+
+test3();

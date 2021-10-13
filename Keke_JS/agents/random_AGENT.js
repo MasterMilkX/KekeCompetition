@@ -17,7 +17,7 @@ function makeSeq(){
 		let action = possActions[Math.floor(Math.random()*possActions.length)];
 		s.push(action);
 	}
-	return s;
+	return simjs.miniSol(s);
 }
 
 

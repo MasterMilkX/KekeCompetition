@@ -9,7 +9,6 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-		<script src="/socket.io/socket.io.js"></script>
 
 
 		<!-- main stylesheet -->
@@ -25,10 +24,6 @@
 
 			button{
 				color:black;
-			}
-			select{
-				font-size:0.75em;
-				margin-top:0.25em;
 			}
 
 			/* Left hand stats table */
@@ -46,17 +41,17 @@
 			}
 
 			/* Central level selection table */
-			#level-table{
+			.level-table{
 				border:4px solid white;
 				font-size:1.2em;
 				margin:1em;
 			}
-			#level-table .row{
+			.level-table .row{
 				border:1px solid white;
 				padding:0.3em;
 			}
 
-			#level-table .header{
+			.level-table .header{
 				border-bottom: 5px solid white;
 				font-size:1.1em;
 				font-weight: bold;
@@ -64,11 +59,14 @@
 				color:#000;
 			}
 
-			#level-table button{
+			.level-table button{
 				font-size:0.75em;
 			}
 			.solvedLevel{
 				background-color: #00EE0088;
+			}
+			.unsolvedLevel{
+				background-color: #EE000088;
 			}
 
 			/* Right hand level set and agent selection */
@@ -78,23 +76,13 @@
 			#levelSetList, #agentList{
 				color:black;
 				padding:5px;
-				font-size:0.75em;
-				margin-top:0.25em
-			}
+				font-size:1em;
 
-
-			.loadBtn{
-				background-color:#FAD90C;
-				padding:0.5em;
-				font-size:1.2em;
-			}
-
-			#resetDataBtn{
-				background-color:#dd000088;
-				padding:0.5em
 			}
 
 		</style>
+		<!-- <script src='js/level-set.js'></script> -->
+		<!-- <script src='get-level-jsons.js'></script> -->
 
 	</head>
 	<body>
@@ -151,7 +139,7 @@
 				<!-- level table -->
 				<div class='col-xs-8 text-center' style='border:1px solid green'>
 					<!-- main level table -->
-					<div id='level-table'>
+					<div class='level-table'>
 						<div class='row row-no-gutters header'>
 							<div class='col-xs-1'>ID #</div>
 							<div class='col-xs-3'>Status</div>
@@ -159,48 +147,60 @@
 							<div class='col-xs-3'>Iterations</div>
 							<div class='col-xs-3'>GUI Mode</div>
 						</div>
-						<!-- NEW LEVELS WILL BE ADDED HERE -->
+						<div class='row row-no-gutters solvedLevel'>
+							<div class='col-xs-1 levelID'>0</div>
+							<div class='col-xs-3 solveStat'>[ Solved! ]</div>
+							<div class='col-xs-2 timeStat'>4.20s</div>
+							<div class='col-xs-3 solveIter'>5042 / 10000</div>
+							<div class='col-xs-3'><button>Show Level</button></div>
+						</div>
+						<div class='row row-no-gutters'>
+							<div class='col-xs-1 levelID'>1</div>
+							<div class='col-xs-3 solveStat'>[ solving... ]</div>
+							<div class='col-xs-2 timeStat'>0s</div>
+							<div class='col-xs-3 solveIter'>0 / 10000</div>
+							<div class='col-xs-3'><button disabled>Show Level</button></div>
+						</div>
+						<div class='row row-no-gutters unsolvedLevel'>
+							<div class='col-xs-1 levelID'>2</div>
+							<div class='col-xs-3 solveStat'>[ Unsolvable ]</div>
+							<div class='col-xs-2 timeStat'>10.0s</div>
+							<div class='col-xs-3 solveIter'>10000 / 10000</div>
+							<div class='col-xs-3'><button disabled>Show Level</button></div>
+						</div>
+						<div class='row row-no-gutters'>
+							<div class='col-xs-1 levelID'>3</div>
+							<div class='col-xs-3 solveStat'>[ - ]</div>
+							<div class='col-xs-2 timeStat'>0s</div>
+							<div class='col-xs-3 solveIter'>0 / 10000</div>
+							<div class='col-xs-3'><button disabled>Show Level</button></div>
+						</div>
 					</div>
 				</div>
 
 				<!-- agent + level set selection -->
 				<div class='col-xs-2 text-center' style='border:1px solid red'>
-					<!-- level set selection -->
 					<div class='row row-no-gutters top-buffer5'>
 						<div class='col-xs-12' id='levelSetSelection'>
 							Level Set:<br>
-							<select id='levelSetList' style='font-size:0.75em;margin-top:0.25em'>
-								<option value='-'>None</option>
+							<select id='levelSetList'>
+								<option value='demo'>Demo</option>
+								<option value='test1'>Test 1</option>
 							</select>
 						</div>
 					</div>
-					<!-- load the level set -->
-					<div class='row row-no-gutters top-buffer1'>
-						<div class='col-xs-12'>
-							<button class='loadBtn' onclick='loadLevelSet()'>Load Level Set</button>
-						</div>
-					</div>
-					<!-- agent selection -->
 					<div class='row row-no-gutters top-buffer5'>
 						<div class='col-xs-12' id='agentSelection'>
 							Agent:<br>
-							<select id='agentList' style='font-size:0.75em;margin-top:0.25em'>
-								<option value='-'>None</option>
+							<select id='agentList'>
+								<option value='default'>Default</option>
+								<option value='random'>Random</option>
 							</select>
 						</div>
 					</div>
-					<!-- train/pause agent -->
-					<div class='row row-no-gutters top-buffer1'>
+					<div class='row row-no-gutters top-buffer5'>
 						<div class='col-xs-12'>
-							<button class='loadBtn' onclick='runAgent()'>RUN AGENT</button>
-						</div>
-					</div>
-
-
-					<!-- reset all of the data saved for the agent -->
-					<div class='row row-no-gutters' style='margin-top: 8em;'>
-						<div class='col-xs-12'>
-							<button id='resetDataBtn' onclick='resetData()'>Reset all levels</button>
+							<button style='background-color:#dd000088;padding:0.5em'>Reset all levels</button>
 						</div>
 					</div>
 					<div>&nbsp;</div>
@@ -208,8 +208,4 @@
 			</div>
 		</div>
 	</body>
-
-	<script src='./index-client.js'></script>
-
-
 </html>
