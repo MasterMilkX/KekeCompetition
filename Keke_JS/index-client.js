@@ -35,7 +35,7 @@ function addLevelRow(id,status='[ - ]', timeExec=0, iter=0){
 		c4.classList.add("col-xs-3", "solveIter");
 		c4.innerHTML = (iter + " / 10000");
 	let c5 = document.createElement("div");
-		c5.classList.add("col-xs-2");
+		c5.classList.add("col-xs-3", 'guiBtn');
 		let showBtn = document.createElement("button");
 		showBtn.innerHTML = "Show Level";
 		showBtn.disabled = (status === '[ - ]' ? true : false);
@@ -64,7 +64,7 @@ socket.on('level-set-list', function(lsl) {
 	let lsSel = document.getElementById("levelSetList");
 	lsSel.innerHTML = "";
 	for(let i=0;i<lsl.length;i++){
-		let l = lsl[i].replace(".json", '').replace("_levels", '');
+		let l = lsl[i].replace(".json", '').replace("_LEVELS", '');
 		let o = document.createElement("option");
 		o.value = l.replace(' ', '');
 		o.innerHTML = l;
@@ -78,7 +78,7 @@ socket.on('agent-list', function(al){
 	let agSel = document.getElementById("agentList");
 	agSel.innerHTML = "";
 	for(let i=0;i<al.length;i++){
-		let l = al[i].replace(".js", '');
+		let l = al[i].replace("_AGENT", '').replace(".js", '');
 		let o = document.createElement("option");
 		o.value = l.toUpperCase().replace(' ', '');
 		o.innerHTML = l;

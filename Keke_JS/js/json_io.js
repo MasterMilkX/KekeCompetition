@@ -13,6 +13,7 @@ const fs = require('fs')
 function importLevelSets(){
 	const jsonDir = 'json_levels/'
 	let jsonFiles = fs.readdirSync(jsonDir);
+	jsonFiles = jsonFiles.filter(x => x[0] != '.');
 	return jsonFiles;
 }	
 
