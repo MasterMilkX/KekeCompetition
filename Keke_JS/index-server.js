@@ -36,7 +36,15 @@ io.on('connection', (socket) =>{
 	io.emit('agent-list', jsonjs.getAgentList());
 });
 
-
+// IMPORT THE AGENT REPORT 
+function sendReport(dat){
+	let rep = jsonjs.importALSReport(dat['agent'],dat['levelSet']+"_levels");
+	if (rep != null){
+		io.emit('return-agent-json',rep);
+	}else{
+		console.log(`- No JSON found for agent [ ${dat['agent']} ] ON LEVEL SET [ ${dat['levelSet']} ]... - `)
+	}
+}
 
 ////     SERVER INTERACTIONS     ////
 
@@ -56,12 +64,22 @@ io.on('connection', (socket) => {
 	})
 });
 
+//get agent json
+io.on('connection', (socket) => {
+	socket.on('get-agent-json', (dat) =>{
+		console.log(`-- RETRIEVING AGENT REPORT [ ${dat['agent']} ]`)
+		sendReport(dat);
+	})
+});
+
 
 //start training an agent on specific level set
 io.on('connection', (socket) => {
-	socket.on('start run', (dat) => {
+	socket.on('start-run', (dat) => {
 		console.log(`-- RUNNING [ ${dat['agent']} ] ON LEVEL SET [ ${dat['levelSet']} ] --`);
 
+		//send report if it exists
+		sendReport(dat);
 
 		//go through all of the levels
 

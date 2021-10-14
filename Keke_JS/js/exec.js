@@ -56,7 +56,7 @@ function run_keke(ascii_level, iterations){
 	let REASON = (i == iterations ? `MAXED ITERATIONS (${iterations})` : `TIMED OUT (${TIMEOUT})s`)
 
 	console.log(`-- NO SOLUTION FOUND: ${REASON}--`);
-	return {"s":'',"i":-1, "t":timeExec};
+	return {"s":'',"i":iterations, "t":timeExec};
 	
 }
 

@@ -61,7 +61,7 @@ function getAgentList(){
 function importAgentReport(agent){
 	let path = 'reports/'+agent+"_REPORT.json";
 
-	if (!fs.existsSync(filepath)){return null}
+	if (!fs.existsSync(path)){console.log(`ERROR: no report found @ ${path}`);return null}
 
 	let j = fs.readFileSync(path);
 	let report = JSON.parse(j);
@@ -80,6 +80,7 @@ function importAgentLevelSetReport(agent, lvlSet){
 			return ls["levels"];
 		}
 	}
+	console.log(`ERROR: Level set not found in agent json reort`)
 	return null;
 }
 

@@ -36,7 +36,7 @@
 				border-style:double;
 				border-width: 5px;
 				border-color:white;
-				/*font-size: 1.2em;*/
+				font-size: 1em;
 			}
 			.stat-table .col-xs-8{
 				border:1px solid white;
@@ -64,8 +64,11 @@
 				color:#000;
 			}
 
-			.guiBtn{
+			.guiCol{
 				text-align: center;
+			}
+			.guiBtn{
+
 			}
 
 			#level-table button{
@@ -73,6 +76,9 @@
 			}
 			.solvedLevel{
 				background-color: #00EE0088;
+			}
+			.unsolvedLevel{
+				background-color: #EE000088;
 			}
 
 			/* Right hand level set and agent selection */
@@ -101,7 +107,7 @@
 		</style>
 
 	</head>
-	<body>
+	<body onload='init()'>
 		<div class='container top-buffer1'>
 			<div class='row'>
 				<div class='col-xs-8 col-xs-offset-2 text-center'>
@@ -130,7 +136,7 @@
 					</div>
 					<div class='row row-no-gutters stat-table' style='margin-top:1em'>
 							<div class='col-xs-8'>Accuracy</div>
-							<div class='col-xs-4' id='level_unsolve_num'>69%</div>
+							<div class='col-xs-4' id='level_acc'>69%</div>
 					</div>
 
 					<!-- level averages stats -->
@@ -138,15 +144,15 @@
 					<div class='stat-table '>
 						<div class='row row-no-gutters equal-col'>
 							<div class='col-xs-8'>Avg. # iterations</div>
-							<div class='col-xs-4' id='level_win_num'>🧐</div>
+							<div class='col-xs-4' id='avg_iter'>🧐</div>
 						</div>
 						<div class='row row-no-gutters equal-col'>
-							<div class='col-xs-8'>Avg. runtime</div>
-							<div class='col-xs-4' id='level_unsolve_num'>😏</div>
+							<div class='col-xs-8'>Avg. runtime (s)</div>
+							<div class='col-xs-4' id='avg_time'>😏</div>
 						</div>
 						<div class='row row-no-gutters equal-col'>
 							<div class='col-xs-8'>Avg. solution length</div>
-							<div class='col-xs-4' id='level_lose_num' height='100%'>😬</div>
+							<div class='col-xs-4' id='avg_sol_len' height='100%'>😬</div>
 						</div>
 					</div>
 					<div>&nbsp;</div>
@@ -164,6 +170,9 @@
 							<div class='col-xs-3'>GUI Mode</div>
 						</div>
 						<!-- NEW LEVELS WILL BE ADDED HERE -->
+
+
+
 					</div>
 				</div>
 
@@ -173,22 +182,16 @@
 					<div class='row row-no-gutters top-buffer5'>
 						<div class='col-xs-12' id='levelSetSelection'>
 							Level Set:<br>
-							<select id='levelSetList' style='font-size:0.75em;margin-top:0.25em'>
+							<select id='levelSetList' onchange='loadAgentSet();'>
 								<option value='-'>None</option>
 							</select>
-						</div>
-					</div>
-					<!-- load the level set -->
-					<div class='row row-no-gutters top-buffer1'>
-						<div class='col-xs-12'>
-							<button class='loadBtn' onclick='loadLevelSet()'>Load Level Set</button>
 						</div>
 					</div>
 					<!-- agent selection -->
 					<div class='row row-no-gutters top-buffer5'>
 						<div class='col-xs-12' id='agentSelection'>
 							Agent:<br>
-							<select id='agentList' style='font-size:0.75em;margin-top:0.25em'>
+							<select id='agentList' onchange='loadAgentSet();'>
 								<option value='-'>None</option>
 							</select>
 						</div>
@@ -204,7 +207,7 @@
 					<!-- reset all of the data saved for the agent -->
 					<div class='row row-no-gutters' style='margin-top: 8em;'>
 						<div class='col-xs-12'>
-							<button id='resetDataBtn' onclick='resetData()'>Reset all levels</button>
+							<button id='resetDataBtn' onclick='resetAgentData()'>Reset all levels</button>
 						</div>
 					</div>
 					<div>&nbsp;</div>
