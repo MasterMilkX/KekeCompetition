@@ -9,6 +9,7 @@ var socket = io();
 
 function init(){
 	loadAgentSet();
+	setInterval(pendEllipse,500);   //iterate ellipses for pending levels
 }
 
 
@@ -24,7 +25,7 @@ function clearLevelTable(){
 }
 
 // MAKES A NEW ROW IN THE LEVEL TABLE
-function addLevelRow(id,status='-', timeExec=0, iter=0,sol=""){
+function addLevelRow(id,status='-', timeExec="?", iter='?',sol=""){
 	let lt = document.getElementById("level-table");
 
 	//create row
@@ -69,6 +70,7 @@ function addLevelRow(id,status='-', timeExec=0, iter=0,sol=""){
 function updateLevelRow(id, status, timeExec, iter, sol){
 	//get columns
 	let row = document.getElementById("levelRow"+id);
+	row.classList.remove('pendingLevel');
 	let c2 = row.getElementsByClassName("solveStat")[0];
 	let c3 = row.getElementsByClassName("timeStat")[0];
 	let c4 = row.getElementsByClassName("solveIter")[0];
@@ -83,6 +85,47 @@ function updateLevelRow(id, status, timeExec, iter, sol){
 
 	//update row color
 	row.classList.add((status == "SOLVED!" ? "solvedLevel" : "unsolvedLevel"));
+}
+
+// SHOW A LEVEL IS CURRENTLY BEING SOLVED BY THE SYSTEM IN THE BACKEND
+function solvingLevelRow(id){
+	let row = document.getElementById("levelRow"+id);
+	row.classList.add("pendingLevel");
+}
+
+// ADD ELLIPSE FOR ALL PENDING ROWS
+var ellipse = 1;
+function pendEllipse(){
+	let pr = document.getElementsByClassName("pendingLevel");
+	ellipse = (ellipse%3)+1;
+	let estr = "";
+	for(let e=0;e<ellipse;e++){estr += ".";}
+	for(let i=0;i<pr.length;i++){
+		pr[i].getElementsByClassName("solveStat")[0].innerHTML = "[ solving" + estr + " ]";
+	}
+}
+
+
+// CLEAR THE TABLE OF ALL AGENT STATS
+function resetLevelTable(){
+	let rows = document.getElementById("level-table").getElementsByClassName("row");
+	for(let i=0;i<rows.length;i++){
+		//skip header row
+		if(rows[i].classList.contains("header"))
+			continue;
+
+		//retrieve data from the columns in the row
+		let r = rows[i];
+		r.classList.remove("solvedLevel");
+		r.classList.remove("unsolvedLevel");
+		r.classList.remove("pendingLevel");
+		r.getElementsByClassName("solveStat")[0].innerHTML = "[ - ]";
+		r.getElementsByClassName("timeStat")[0].innerHTML = "?s";
+		r.getElementsByClassName("solveIter")[0].innerHTML = " ? / 10000";
+		let btn = r.getElementsByClassName("guiBtn")[0];
+		btn.value = '';
+		btn.disabled = true;
+	}
 }
 
 // UPDATE THE STAT TABLES BASED ON THE LEVEL TABLE INFO
@@ -199,6 +242,25 @@ socket.on('return-agent-json', function(j){
 });
 
 
+// RESET THE DATA IN THE LEVEL TABLE FROM AN UPDATED JSON FILE
+socket.on('reset-agent-json', function(){
+	resetLevelTable();
+});
+
+
+// SHOW A LEVEL IS CURRENTLY BEING SOLVED
+socket.on('pending-level', function(id){
+	solvingLevelRow(id);
+	console.log('new pending');
+})
+
+// UPDATE A LEVEL ROW ON COMPLETION
+socket.on('finish-level', function(lvl){
+	let ss = (lvl['solution'].length > 0 ? "SOLVED!" : "MAXED");
+	console.log("GOT LEVEL DATA" + lvl['id']);
+	updateLevelRow(lvl['id'],ss,lvl['time'],lvl['iterations'],lvl['solution']);
+});
+
 /////////    CLIENT BROADCAST FUNCTIONS    //////////
 
 function loadAgentSet(){
@@ -211,7 +273,7 @@ function loadAgentJSON(){
 	let lvlSet = document.getElementById("levelSetList").value;
 	let agent = document.getElementById("agentList").value;
 
-	socket.emit('get-agent-json', {"agent":agent, "levelSet":lvlSet});
+	socket.emit('get-agent-json', {"agent":agent, "levelSet":(lvlSet+"_LEVELS")});
 	
 }
 
@@ -219,7 +281,7 @@ function loadAgentJSON(){
 function loadLevelSet(){
 	let lvlSet = document.getElementById("levelSetList").value;
 
-	socket.emit('get-level-set', {"levelSet":lvlSet});
+	socket.emit('get-level-set', {"levelSet":(lvlSet+"_LEVELS")});
 }
 
 // TRAIN THE SELECTED AGENT ON THE SELECTED DATASET
@@ -229,16 +291,34 @@ function runAgent(){
 
 	//confirm to use agent on level set
 	if(confirm(`Run agent [ ${agent} ] on level set [ ${lvlSet} ]?`)){
-		socket.emit('start-run', {"agent":agent, "levelSet":lvlSet});
+
+		//get set of unsolved levels in the level set
+		let lvls = document.getElementById("level-table").getElementsByClassName("row");
+		let usi = [];
+		for(let i=0;i<lvls.length;i++){
+			let l = lvls[i];
+			if(l.classList.contains("header"))
+				continue;
+
+
+			let stat = l.getElementsByClassName("solveStat")[0].innerHTML;
+			if(stat.includes("-")){
+				let id = l.getElementsByClassName("levelID")[0].innerHTML;
+				usi.push(parseInt(id));
+			}
+		}
+		socket.emit('start-run', {"agent":agent, "levelSet":(lvlSet+"_LEVELS"), "unsolve_set_ids":usi});
 	}
 }
 
 // CLEAR THE SAVED JSON DATA FOR AN AGENT ON THE DATASET
 function resetAgentData(){
+	let lvlSet = document.getElementById("levelSetList").value;
 	let agent = document.getElementById("agentList").value;
 
 	if(confirm(`Are you sure you want to clear the JSON data for [ ${agent} ] on level set [ ${lvlSet} ]?`)){
-		alert("lol, baka");
+		//alert("lol, baka");
+		socket.emit('delete-json-set', {"agent":agent, "levelSet":(lvlSet+"_LEVELS")});
 	}
 }
 

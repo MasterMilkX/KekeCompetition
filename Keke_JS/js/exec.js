@@ -83,6 +83,7 @@ function executeLevel(ls,ln,iter){
 
 	//export to JSON if solution found
 	jsonjs.exportReport(kekeAgent + "_REPORT.json", ls, ln, iterCt, timeExec,solution);
+	return {"id":ln, "iterations":iterCt, "time":timeExec, "solution":solution};
 
 }
 
@@ -92,6 +93,8 @@ function executeLevelSet(ls,iter){
 
 	console.log(`-- SOLVING [ ${lvlSet.length} ] LEVELS FROM LEVEL SET [ ${ls} ] FOR [ ${iter} ] ITERATIONS --`);
 
+
+	let report = [];
 	for(let l=0;l<lvlSet.length;l++){
 		let lvl = lvlSet[l];
 		console.log(` LEVEL [ ${lvl.id} ] `)
@@ -106,9 +109,11 @@ function executeLevelSet(ls,iter){
 
 		//export to JSON if solution found
 		jsonjs.exportReport(kekeAgent + "_REPORT.json", ls, lvl.id, iterCt, timeExec,solution);
+		report.push({"id":lvl.id, "iterations":iterCt, "time":timeExec, "solution":solution});
 
 		console.log("");
 	}
+	return report;
 }
 
 
@@ -117,4 +122,9 @@ function main(){
 	executeLevelSet(levelSetName,MAX_ITER);
 }
 
-main();
+//main();
+
+
+module.exports = {
+	solveLevel: function(levelSet,id){return executeLevel(levelSet,id,MAX_ITER);}
+}

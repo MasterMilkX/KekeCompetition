@@ -9,7 +9,7 @@ var simjs = require('../js/simulation')
 
 var agentJSON = "report.json";
 
-let possActions = ["", "right", "up", "left", "down"];
+let possActions = ["space", "right", "up", "left", "down"];
 let stateSet = [];
 
 let curIteration = 0;
@@ -114,6 +114,7 @@ function iterSolve(init_state){
 		stateSet.push(children[c][1].mapRep);
 		//console.log(children[c].mapRep);
 		if(children[c][1].win){
+			//console.log(children[c][1].actionSet);
 			return simjs.miniSol(children[c][1].actionSet);
 		}
 	}

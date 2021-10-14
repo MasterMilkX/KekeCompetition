@@ -1304,7 +1304,7 @@ function nextMove(nextDir){
 	moved = false;
 
 	//if directional move, move the players
-	if(nextDir != "")
+	if(nextDir != "space")
 		movePlayers(nextDir, moved_objects, game_state);
 
 	//move the movers (i.e. X-is-MOVE objects)

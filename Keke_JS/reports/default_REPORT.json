@@ -1,90 +1,113 @@
 [
   {
-    "levelSet": "demo_levels",
+    "levelSet": "demo_LEVELS",
     "levels": [
       {
         "id": 1,
         "iterations": 22,
-        "time": 0.018,
+        "time": 0.022,
         "solution": "rrrrr"
       },
       {
         "id": 2,
         "iterations": 273,
-        "time": 0.132,
+        "time": 0.149,
         "solution": "rrrruuurddd"
       },
       {
         "id": 3,
-        "iterations": -1,
-        "time": 5.001,
+        "iterations": 10000,
+        "time": 10.004,
         "solution": ""
       },
       {
         "id": 4,
         "iterations": 33,
-        "time": 0.014,
+        "time": 0.016,
         "solution": "lllll"
       },
       {
         "id": 5,
-        "iterations": 1062,
-        "time": 0.643,
+        "iterations": 1063,
+        "time": 0.835,
         "solution": "rddrrurddruuu"
       },
       {
         "id": 6,
         "iterations": 504,
-        "time": 0.34,
+        "time": 0.423,
         "solution": "rrddrrruu"
       },
       {
         "id": 7,
         "iterations": 5,
-        "time": 0.003,
+        "time": 0.004,
         "solution": "rururu"
       },
       {
         "id": 8,
-        "iterations": -1,
-        "time": 0.001,
+        "iterations": 10000,
+        "time": 0.003,
         "solution": ""
       },
       {
         "id": 9,
         "iterations": 324,
-        "time": 0.198,
+        "time": 0.231,
         "solution": "ulllrrruuu"
       },
       {
         "id": 10,
         "iterations": 132,
-        "time": 0.065,
+        "time": 0.07,
         "solution": "ruurrrdd"
       },
       {
         "id": 11,
-        "iterations": 214,
-        "time": 0.242,
+        "iterations": 216,
+        "time": 0.29,
         "solution": "ddddrrrurrduuuuu"
       },
       {
         "id": 12,
         "iterations": 143,
-        "time": 0.187,
+        "time": 0.226,
         "solution": "ddddrrrrrrudllurdruuuuul"
       },
       {
         "id": 13,
         "iterations": 369,
-        "time": 0.268,
+        "time": 0.325,
         "solution": "rruuulull"
       },
       {
         "id": 14,
         "iterations": 227,
-        "time": 0.116,
+        "time": 0.15,
         "solution": "llllulddrrr"
+      }
+    ]
+  },
+  {
+    "levelSet": "test_LEVELS",
+    "levels": [
+      {
+        "id": 0,
+        "iterations": 428,
+        "time": 0.504,
+        "solution": "srrruusuuuuu"
+      },
+      {
+        "id": 1,
+        "iterations": 225,
+        "time": 0.192,
+        "solution": "ullluuuluurrrdd"
+      },
+      {
+        "id": 2,
+        "iterations": 3102,
+        "time": 5.951,
+        "solution": "ruuuldduulddrrddldldrrrdr"
       }
     ]
   }

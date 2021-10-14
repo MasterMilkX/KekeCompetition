@@ -161,6 +161,48 @@ function exportAgentReport(file,ls,levelID,iterCt,timeTaken,sol){
 
 }
 
+// DELETES THE REPORT FOR THE ASSOCIATED AGENT + LEVEL SET
+function deleteAgentLevelSetReport(agent, lvlSet){
+	let curReport = [];
+	let filepath = "./reports/"+agent+"_REPORT.json";
+
+	//if it exists, read in the current report
+	try {
+	  if (fs.existsSync(filepath)) {
+	    let j = fs.readFileSync(filepath, 'utf8', err => {
+	    	if (err){
+	    		console.log(err);
+	    		return;
+	    	}
+	    });
+	    if(j != ""){
+	    	//console.log("-- REPORT -- ")
+	    	//console.log(j)
+			curReport = JSON.parse(j);
+	    }
+		
+	  }
+	}catch(err){
+		console.log("UH OH!"); 
+		console.log(err);
+	}
+	
+	//remove levelset object if it exists
+	let lsInd = curReport.map(o => o.levelSet).indexOf(lvlSet);
+	curReport[lsInd] = {"levelSet":lvlSet, "levels":[]};
+
+	//create JSON string
+	let crJSON = JSON.stringify(curReport,null,2);
+
+	//overwrite the JSON file
+	fs.writeFileSync(filepath,crJSON,err => {
+		if (err) {
+		    console.error(err);
+		    return;
+	  	}
+	});
+
+}
 
 
 
@@ -176,6 +218,7 @@ module.exports = {
 	getAgentList : function(){return getAgentList();},
 	importAgentReport: function(a){return importAgentReport(a);},
 	importALSReport: function(a, l){return importAgentLevelSetReport(a, l);},
-	exportReport: function(f,ls,id,i,t,s){exportAgentReport(f,ls,id,i,t,s);}
+	exportReport: function(f,ls,id,i,t,s){exportAgentReport(f,ls,id,i,t,s);},
+	deleteALSReport: function(a,l){return deleteAgentLevelSetReport(a,l);}
 
 }

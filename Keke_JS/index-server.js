@@ -15,10 +15,17 @@ const { Server } = require("socket.io");
 const io = new Server(server);
 
 //file I/O
-const fs = require('fs')
+const fs = require('fs');
 
 //import level imports
-const jsonjs = require('./js/json_io')
+const jsonjs = require('./js/json_io');
+
+//import execution code
+const execjs = require('./js/exec');
+
+
+
+
 
 
 ////   SETUP THE SERVER   ////
@@ -36,9 +43,13 @@ io.on('connection', (socket) =>{
 	io.emit('agent-list', jsonjs.getAgentList());
 });
 
+
+////     FUNCTION DEFINITIONS    ////
+
+
 // IMPORT THE AGENT REPORT 
 function sendReport(dat){
-	let rep = jsonjs.importALSReport(dat['agent'],dat['levelSet']+"_levels");
+	let rep = jsonjs.importALSReport(dat['agent'],dat['levelSet']);
 	if (rep != null){
 		io.emit('return-agent-json',rep);
 	}else{
@@ -46,13 +57,22 @@ function sendReport(dat){
 	}
 }
 
+// SOLVE A LEVEL BY ID # FOR A LEVEL SET
+function solveLevel(ls,id){
+	io.emit('pending-level',id);
+	let res = execjs.solveLevel(ls,id);
+	io.emit('finish-level',res);
+	console.log(`* FINISHED LEVEL [ ${id} ] *`)
+}
+
+
 ////     SERVER INTERACTIONS     ////
 
 
 //get the level set for the agent to populate the level table
 io.on('connection', (socket) => {
 	socket.on('get-level-set', (dat) =>{
-		let ls = dat['levelSet']+"_LEVELS";
+		let ls = dat['levelSet'];
 		console.log(`-- RETRIEVING LEVEL SET [ ${ls} ] --`)
 		let j = jsonjs.getLevelSet(ls);
 		if(j != null){
@@ -78,18 +98,22 @@ io.on('connection', (socket) => {
 	socket.on('start-run', (dat) => {
 		console.log(`-- RUNNING [ ${dat['agent']} ] ON LEVEL SET [ ${dat['levelSet']} ] --`);
 
-		//send report if it exists
-		sendReport(dat);
-
 		//go through all of the levels
-
-
-
-
+		let usi = dat['unsolve_set_ids'];
+		for(let i=0;i<usi.length;i++){
+			solveLevel(dat['levelSet'],usi[i]);
+		}
 	});
 });
 
 
+io.on('connection', (socket) =>{
+	socket.on('delete-json-set', (dat) =>{
+		jsonjs.deleteALSReport(dat['agent'],dat['levelSet']);
+		console.log(`-- DELETED REPORT FOR [ ${dat['agent']} ] ON LEVEL SET [ ${dat['levelSet']} ] --`)
+		io.emit('reset-agent-json', []);
+	});
+});
 
 
 
