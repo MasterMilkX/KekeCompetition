@@ -6,7 +6,7 @@
 //get imports (NODEJS)
 var simjs = require('../js/simulation')					//access the game states and simulation
 
-let possActions = ["", "right", "up", "left", "down"];
+let possActions = ["space", "right", "up", "left", "down"];
 
 var MAX_SEQ = 50;
 
@@ -17,7 +17,7 @@ function makeSeq(){
 		let action = possActions[Math.floor(Math.random()*possActions.length)];
 		s.push(action);
 	}
-	return simjs.miniSol(s);
+	return s;
 }
 
 

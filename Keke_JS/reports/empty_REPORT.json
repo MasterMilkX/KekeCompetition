@@ -1,0 +1,114 @@
+[
+  {
+    "levelSet": "demo_LEVELS",
+    "levels": [
+      {
+        "id": 1,
+        "iterations": 10000,
+        "time": 0.002,
+        "solution": ""
+      },
+      {
+        "id": 2,
+        "iterations": 10000,
+        "time": 0.002,
+        "solution": ""
+      },
+      {
+        "id": 3,
+        "iterations": 10000,
+        "time": 0.002,
+        "solution": ""
+      },
+      {
+        "id": 4,
+        "iterations": 10000,
+        "time": 0.002,
+        "solution": ""
+      },
+      {
+        "id": 5,
+        "iterations": 10000,
+        "time": 0.001,
+        "solution": ""
+      },
+      {
+        "id": 6,
+        "iterations": 10000,
+        "time": 0.001,
+        "solution": ""
+      },
+      {
+        "id": 7,
+        "iterations": 10000,
+        "time": 0.001,
+        "solution": ""
+      },
+      {
+        "id": 8,
+        "iterations": 10000,
+        "time": 0,
+        "solution": ""
+      },
+      {
+        "id": 9,
+        "iterations": 10000,
+        "time": 0,
+        "solution": ""
+      },
+      {
+        "id": 10,
+        "iterations": 10000,
+        "time": 0.001,
+        "solution": ""
+      },
+      {
+        "id": 11,
+        "iterations": 10000,
+        "time": 0.001,
+        "solution": ""
+      },
+      {
+        "id": 12,
+        "iterations": 10000,
+        "time": 0,
+        "solution": ""
+      },
+      {
+        "id": 13,
+        "iterations": 10000,
+        "time": 0.001,
+        "solution": ""
+      },
+      {
+        "id": 14,
+        "iterations": 10000,
+        "time": 0.001,
+        "solution": ""
+      }
+    ]
+  },
+  {
+    "levelSet": "test_LEVELS",
+    "levels": [
+      {
+        "id": 0,
+        "iterations": 10000,
+        "time": 0.015,
+        "solution": ""
+      },
+      {
+        "id": 1,
+        "iterations": 10000,
+        "time": 0.003,
+        "solution": ""
+      },
+      {
+        "id": 2,
+        "iterations": 10000,
+        "time": 0.002,
+        "solution": ""
+      }
+    ]
+  }
+]

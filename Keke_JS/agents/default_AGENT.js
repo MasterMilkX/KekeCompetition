@@ -115,7 +115,7 @@ function iterSolve(init_state){
 		//console.log(children[c].mapRep);
 		if(children[c][1].win){
 			//console.log(children[c][1].actionSet);
-			return simjs.miniSol(children[c][1].actionSet);
+			return children[c][1].actionSet;
 		}
 	}
 
@@ -155,29 +155,18 @@ function getNextState(dir, new_kk_p, parent){
 	newActions.push.apply(newActions, parent.actionSet);
 	newActions.push(dir);
 
-	//console.log("before KEKE (" + newActions + "): \n" + doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map))
+	//console.log("before KEKE (" + newActions + "): \n" + simjs.doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map))
 
 	//move the along the action space
 	let didwin = false;
 	for(let a=0;a<newActions.length;a++){
-		let moved_objects = [];
+		let res = simjs.nextMove(newActions[a],new_kk_p);
+		new_kk_p = res['next_state'];
+		didwin = res['won'];
 
-		if(newActions[a] != "")
-			simjs.movePlayers(newActions[a], moved_objects, new_kk_p);
-			
-		//move any npcs
-		simjs.moveAutoMovers(moved_objects, new_kk_p);
-
-		//update the rule set if this object is a rule
-		for(var m=0;m<moved_objects.length;m++){
-			if(moved_objects[m].type == "word"){
-				simjs.interpretRules(new_kk_p);
-			}
-		}
-
-		didwin = simjs.win(new_kk_p['players'], new_kk_p['winnables']);
-
+		//everyone died
 		if(new_kk_p['players'].length == 0){
+			didwin = false;
 			break;
 		}
 
@@ -188,7 +177,7 @@ function getNextState(dir, new_kk_p, parent){
 	let word_d = heuristic2(new_kk_p['players'], new_kk_p['words']);
 	let push_d = heuristic2(new_kk_p['players'], new_kk_p['pushables']);
 	//console.log(d);
-	//console.log("after KEKE (" + newActions + "): \n" + doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map));
+	//console.log("after KEKE (" + newActions + "): \n" + simjs.doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map));
 
 
 	return [(win_d+word_d+push_d)/3, new node(simjs.doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map), newActions, parent, didwin, (new_kk_p['players'].length == 0))]

@@ -12,7 +12,9 @@ var kekejs = require('../agents/' + kekeAgent + '_AGENT')
 var jsonjs = require('./json_io')
 var simjs = require('./simulation')
 
-const cluster = require('cluster')
+
+
+
 
 // RUN THE KEKE SOLVER ON A LEVEL
 function run_keke(ascii_level, iterations){
@@ -44,8 +46,12 @@ function run_keke(ascii_level, iterations){
 			let end = Date.now();
 			let timeExec = (end-start)/1000;
 
+			//check validity of solution; repeat if invalid
+			if(!validSolution(solution,gp)){continue;}
+
+			//winning solution -> return good solution
 			console.log(`-- SOLUTION FOUND IN ${i} / ${iterations} ITERATIONS | ${timeExec}s --`);
-			return {"s":solution,"i":i, "t":timeExec};
+			return {"s":simjs.miniSol(solution),"i":i, "t":timeExec};
 		}
 	}
 
@@ -56,10 +62,11 @@ function run_keke(ascii_level, iterations){
 	let REASON = (i == iterations ? `MAXED ITERATIONS (${iterations})` : `TIMED OUT (${TIMEOUT})s`)
 
 	console.log(`-- NO SOLUTION FOUND: ${REASON}--`);
-	return {"s":'',"i":iterations, "t":timeExec};
+	return {"s":'',"i":i, "t":timeExec};
 	
 }
 
+// CHECK IF THE EXECUTION TIMED OUT
 function timedOut(s){
 	let maybe_end = Date.now();
 	if((maybe_end - s)/1000 > TIMEOUT){
@@ -68,8 +75,39 @@ function timedOut(s){
 	return false;
 }
 
+// CHECK IF THE SOLUTION RETURNED IS VALID AND WINNABLE
+function validSolution(sol, game_state){
+	let new_gs = game_state;
+	for(let i=0;i<sol.length;i++){
+		//iterate overgame state
+		let res = simjs.nextMove(sol[i],new_gs);
+		new_gs = res['next_state'];
+		didwin = res['won'];
+
+		//winning solution reached
+		if(didwin){return true;}
+
+		//console.log("after KEKE (" + sol[i] + "): \n" + simjs.doubleMap2Str(new_gs.obj_map, new_gs.back_map));
+
+	}
+
+	//no win state reached
+	return false;
+}
+
+
+
+
+
+
+
+
 // SOLVE A SINGLE LEVEL FROM A LEVEL SET FOR A SET NUMBER OF ITERATIONS
-function executeLevel(ls,ln,iter){
+function executeLevel(ls,ln,iter,agent='default'){
+	//reimport keke based on agent
+	kekejs = require('../agents/' + agent + '_AGENT')
+
+
 	let lvlSet = jsonjs.getLevelSet(ls);
 	let lvl = jsonjs.getLevel(lvlSet,ln);
 	console.log(` -- LEVEL [ ${ln} ] FROM LEVEL SET [ ${ls} ] FOR [ ${iter} ] ITERATIONS --`)
@@ -82,13 +120,16 @@ function executeLevel(ls,ln,iter){
 
 
 	//export to JSON if solution found
-	jsonjs.exportReport(kekeAgent + "_REPORT.json", ls, ln, iterCt, timeExec,solution);
+	jsonjs.exportReport(agent + "_REPORT.json", ls, ln, iterCt, timeExec,solution);
 	return {"id":ln, "iterations":iterCt, "time":timeExec, "solution":solution};
 
 }
 
 // SOLVE ALL LEVELS IN A LEVEL SET FOR A SET NUMBER OF ITERATIONS
-function executeLevelSet(ls,iter){
+function executeLevelSet(ls,iter,agent='default'){
+	//reimport keke based on agent
+	kekejs = require('../agents/' + agent + '_AGENT')
+
 	let lvlSet = jsonjs.getLevelSet(ls);
 
 	console.log(`-- SOLVING [ ${lvlSet.length} ] LEVELS FROM LEVEL SET [ ${ls} ] FOR [ ${iter} ] ITERATIONS --`);
@@ -106,9 +147,8 @@ function executeLevelSet(ls,iter){
 		let timeExec = r.t;
 
 		
-
 		//export to JSON if solution found
-		jsonjs.exportReport(kekeAgent + "_REPORT.json", ls, lvl.id, iterCt, timeExec,solution);
+		jsonjs.exportReport(agent + "_REPORT.json", ls, lvl.id, iterCt, timeExec,solution);
 		report.push({"id":lvl.id, "iterations":iterCt, "time":timeExec, "solution":solution});
 
 		console.log("");
@@ -117,14 +157,18 @@ function executeLevelSet(ls,iter){
 }
 
 
-function main(){
+
+
+
+
+function test(){
 	//executeLevel(levelSetName,levelNum,5000)
-	executeLevelSet(levelSetName,MAX_ITER);
+	executeLevelSet(levelSetName,MAX_ITER,kekeAgent);
 }
 
-//main();
+//test();
 
 
 module.exports = {
-	solveLevel: function(levelSet,id){return executeLevel(levelSet,id,MAX_ITER);}
+	solveLevel: function(levelSet,id,agent){return executeLevel(levelSet,id,MAX_ITER,agent);}
 }

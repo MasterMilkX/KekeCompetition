@@ -1298,7 +1298,7 @@ function inArr(arr, e){
 
 
 // GOTO THE NEXT DIRECTIONAL POINT IN THE SOLUTION STEP
-function nextMove(nextDir){
+function nextMove(nextDir,game_state){
 	//reset
 	var moved_objects = [];
 	moved = false;
@@ -1320,14 +1320,7 @@ function nextMove(nextDir){
 
 	//check if the game has been won
 	wonGame = win(game_state['players'],game_state['winnables']);
-	if(wonGame){
-		drawWin();
-		endRules = getCurRules();
-	}
-
-	
-	pathIndex++;
-	moved = true;
+	return {'next_state':game_state,'won':wonGame};
 }
 
 
@@ -1607,7 +1600,7 @@ function translateSol(solStr){
 		else if(a == "R")
 			solution.push("right");
 		else if(a == "S")
-			solution.push("");
+			solution.push("space");
 	}
 	return solution;
 }
@@ -1615,15 +1608,17 @@ function translateSol(solStr){
 
 ///////////////      EXPORTING FUNCTIONS      ///////////////
 
-
+//turns solution from full words to single letters [left -> l]
 function minimizeSolution(solution){
 	let miniSol = [];
 	for(let s=0;s<solution.length;s++){
-		miniSol.push(solution[s][0].toLowerCase());
+		step = (solution[s] != "" ? solution[s][0] : "space");
+		miniSol.push(step.toLowerCase());
 	}
 	return miniSol.join("");
 }
 
+//creates a JSON object from the current map data
 function level2JSON(lvl=null, ID=0, name="", author="Baba"){
 	if(lvl == null){
 		lvl = game_state["orig_map"];
@@ -1644,6 +1639,7 @@ module.exports = {
 	setupLevel : function(m) {makeLevel(m);},
 	getGamestate : function(){ return game_state;},
 	clearLevel : function(state){clearLevel(state);},
+	nextMove : function(action,gs){return nextMove(action,gs);},
 
 	parseMap : function(m) { return parseMap(m);},
 	map2Str : function(m){return map2Str(m);},

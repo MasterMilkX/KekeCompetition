@@ -3,13 +3,46 @@
 // Written by Milk
 
 
+////  GLOBAL VARIABLES ///// 
 
 var socket = io();
 
+var tableFilled = false;		//if the level set table has been populated with the level data yet
+var executingAgent = false;		//if currently executing the agent on the level set
+var unsolvedLevels = [];		//list of currently unsolved levels
 
+
+
+
+
+// USE THE LOCALLY SAVED SETUP FOR THE LEVEL-SET AND AGENT
+function useLastSetup(){
+	//set the level set dropdown + value
+	if(localStorage.lvlSet)
+		document.getElementById("levelSetList").value = localStorage.lvlSet
+	else
+		localStorage.lvlSet = document.getElementById("levelSetList").value;
+	
+
+	//set the agent dropdown + value
+	if(localStorage.agent){
+		document.getElementById("agentList").value = localStorage.agent;
+	}
+	else
+		localStorage.agent = document.getElementById("agentList").value;
+}
+
+
+
+// CALLED AT THE INITIALIZATION OF THE SYSTEM/SITE
 function init(){
 	loadAgentSet();
 	setInterval(pendEllipse,500);   //iterate ellipses for pending levels
+	
+	//make sure the table is always loaded on start
+	setInterval(function(){
+		if(!tableFilled){loadAgentSet();setDropDowns();}
+	},1000);
 }
 
 
@@ -22,6 +55,7 @@ function clearLevelTable(){
 	while (lt.children.length > 1) {
 	    lt.removeChild(lt.lastChild);
 	}
+	tableFilled = false;
 }
 
 // MAKES A NEW ROW IN THE LEVEL TABLE
@@ -64,6 +98,10 @@ function addLevelRow(id,status='-', timeExec="?", iter='?',sol=""){
 
 	//add row to table
 	lt.appendChild(r);
+
+
+	//say the table is filled with something
+	tableFilled = true;
 }
 
 // UPDATE A LEVEL TABLE ROW WITH JSON INFO
@@ -90,7 +128,8 @@ function updateLevelRow(id, status, timeExec, iter, sol){
 // SHOW A LEVEL IS CURRENTLY BEING SOLVED BY THE SYSTEM IN THE BACKEND
 function solvingLevelRow(id){
 	let row = document.getElementById("levelRow"+id);
-	row.classList.add("pendingLevel");
+	if(row)
+		row.classList.add("pendingLevel");
 }
 
 // ADD ELLIPSE FOR ALL PENDING ROWS
@@ -184,6 +223,31 @@ function updateStats(){
 	document.getElementById("avg_sol_len").innerHTML = solCtAvg.toFixed(1);
 }
 
+// CHANGE THE AGENT FROM THE DROPDOWN
+function updateAgent(){
+	if(executingAgent){
+		alert("Cannot change agent set while solving levels!");
+		document.getElementById("agentList").value = localStorage.agent;
+		return;
+	}
+	console.log("changed agent");
+	localStorage.agent = document.getElementById("agentList").value;
+	loadAgentSet();
+}
+
+// CHANGE THE LEVEL SET FROM THE DROPDOWN
+function updateLvlSet(){
+	//prevent change while executing agent
+	if(executingAgent){
+		alert("Cannot change level set while solving levels!");
+		document.getElementById("levelSetList").value = localStorage.lvlSet
+		return;
+	}
+	console.log("changed level set")
+	localStorage.lvlSet = document.getElementById("levelSetList").value;
+	loadAgentSet();
+}
+
 
 /////////    SERVER RECEPTION FUNCTIONS    //////////
 
@@ -200,6 +264,8 @@ socket.on('level-set-list', function(lsl) {
 		o.innerHTML = l;
 		lsSel.appendChild(o);
 	}
+
+	useLastSetup();
 });
 
 // RECIEVE AGENT LIST FROM SERVER
@@ -214,6 +280,8 @@ socket.on('agent-list', function(al){
 		o.innerHTML = l;
 		agSel.appendChild(o);
 	}
+
+	useLastSetup();
 });
 
 //RECIEVE LEVEL SET JSON FOR AGENT
@@ -248,18 +316,28 @@ socket.on('reset-agent-json', function(){
 });
 
 
+
+
+
 // SHOW A LEVEL IS CURRENTLY BEING SOLVED
 socket.on('pending-level', function(id){
 	solvingLevelRow(id);
-	console.log('new pending');
 })
 
-// UPDATE A LEVEL ROW ON COMPLETION
+// UPDATE A LEVEL ROW ON COMPLETION AND SOLVE THE NEXT ONE IF AVAILABLE
 socket.on('finish-level', function(lvl){
+	//update the level row with the new info
 	let ss = (lvl['solution'].length > 0 ? "SOLVED!" : "MAXED");
-	console.log("GOT LEVEL DATA" + lvl['id']);
+	console.log("GOT LEVEL DATA: " + lvl['id']);
 	updateLevelRow(lvl['id'],ss,lvl['time'],lvl['iterations'],lvl['solution']);
+	unsolvedLevels.shift()	//remove the level from the unsolved listx
+
+	//solve the next level if possible
+	if(!executingAgent){return;}
+	solveNextLevel();
 });
+
+
 
 /////////    CLIENT BROADCAST FUNCTIONS    //////////
 
@@ -270,8 +348,8 @@ function loadAgentSet(){
 
 // LOAD THE AGENT JSON FOR THE LEVEL SET
 function loadAgentJSON(){
-	let lvlSet = document.getElementById("levelSetList").value;
-	let agent = document.getElementById("agentList").value;
+	let lvlSet = localStorage.lvlSet;
+	let agent = localStorage.agent;
 
 	socket.emit('get-agent-json', {"agent":agent, "levelSet":(lvlSet+"_LEVELS")});
 	
@@ -279,42 +357,117 @@ function loadAgentJSON(){
 
 // LOAD THE LEVEL SET FROM THE JSON FILE
 function loadLevelSet(){
-	let lvlSet = document.getElementById("levelSetList").value;
+	let lvlSet = localStorage.lvlSet;
 
 	socket.emit('get-level-set', {"levelSet":(lvlSet+"_LEVELS")});
 }
 
+
+
+
 // TRAIN THE SELECTED AGENT ON THE SELECTED DATASET
 function runAgent(){
-	let lvlSet = document.getElementById("levelSetList").value;
-	let agent = document.getElementById("agentList").value;
+	if(executingAgent){return;}	//check if already running agent
+
+	let lvlSet = localStorage.lvlSet;
+	let agent = localStorage.agent;
 
 	//confirm to use agent on level set
 	if(confirm(`Run agent [ ${agent} ] on level set [ ${lvlSet} ]?`)){
-
-		//get set of unsolved levels in the level set
-		let lvls = document.getElementById("level-table").getElementsByClassName("row");
-		let usi = [];
-		for(let i=0;i<lvls.length;i++){
-			let l = lvls[i];
-			if(l.classList.contains("header"))
-				continue;
-
-
-			let stat = l.getElementsByClassName("solveStat")[0].innerHTML;
-			if(stat.includes("-")){
-				let id = l.getElementsByClassName("levelID")[0].innerHTML;
-				usi.push(parseInt(id));
-			}
-		}
-		socket.emit('start-run', {"agent":agent, "levelSet":(lvlSet+"_LEVELS"), "unsolve_set_ids":usi});
+		unsolvedLevels = getUnsolvedLevels();
+		executingAgent = true;
+		solveNextLevel();
+		toggleSolveBtn();
+		//socket.emit('start-run', {"agent":agent, "levelSet":(lvlSet+"_LEVELS"), "unsolve_set_ids":usi});
 	}
+}
+
+// STOP THE AGENT FROM TESTING THE LEVELS
+function pauseAgent(){
+	if(!executingAgent){return;}
+
+	let lvlSet = localStorage.lvlSet;
+	let agent = localStorage.agent;
+
+	//confirm cancellation
+	if(!confirm(`Want to stop running agent [ ${agent} ] on level set [ ${lvlSet} ]?\nAny currently running levels will be finished.`)){
+		return;
+	}
+
+	executingAgent = false;
+	toggleSolveBtn();
+}
+
+
+
+// SOLVE THE NEXT LEVEL IN THE UNSOLVED LIST
+function solveNextLevel(){
+	//all levels solved
+	if(unsolvedLevels.length == 0){
+		console.log("SOLVED ALL LEVELS!")
+		executingAgent = false;
+		toggleSolveBtn();
+		return;
+	}
+
+	let lvlSet = localStorage.lvlSet;
+	let agent = localStorage.agent.toLowerCase();
+
+	//pass the next unsolved level data to the server to solve it
+	let lv = unsolvedLevels[0];
+	socket.emit('solve-level', {"agent":agent, "levelSet":(lvlSet+"_LEVELS"), "levelID":lv});
+}
+
+
+// TOGGLE TO RUN AGENT BUTTON GUI
+function toggleSolveBtn(){
+	let btn = document.getElementById("agentExecBtn");
+
+	//change to pause btn
+	if(executingAgent){
+		btn.innerHTML = "PAUSE AGENT";
+		btn.classList.remove("runBtn");
+		btn.classList.add("pauseBtn");
+		btn.onclick = function(){pauseAgent()}
+
+	}
+	//change to run btn
+	else{
+		btn.innerHTML = "RUN AGENT";
+		btn.classList.add("runBtn");
+		btn.classList.remove("pauseBtn")
+		btn.onclick = function(){runAgent()}
+	}
+}
+
+
+
+// RETURNS A LIST OF LEVELS THAT ARE UNSOLVED CURRENTLY 
+function getUnsolvedLevels(){
+	//get set of unsolved levels in the level set
+	let lvls = document.getElementById("level-table").getElementsByClassName("row");
+	let usi = [];
+	for(let i=0;i<lvls.length;i++){
+		let l = lvls[i];
+
+		//ignore header row
+		if(l.classList.contains("header"))
+			continue;
+
+		//get status and add unsolved status levels
+		let stat = l.getElementsByClassName("solveStat")[0].innerHTML;
+		if(stat.includes("-")){
+			let id = l.getElementsByClassName("levelID")[0].innerHTML;
+			usi.push(parseInt(id));
+		}
+	}
+	return usi;
 }
 
 // CLEAR THE SAVED JSON DATA FOR AN AGENT ON THE DATASET
 function resetAgentData(){
-	let lvlSet = document.getElementById("levelSetList").value;
-	let agent = document.getElementById("agentList").value;
+	let lvlSet = localStorage.lvlSet;
+	let agent = localStorage.agent;
 
 	if(confirm(`Are you sure you want to clear the JSON data for [ ${agent} ] on level set [ ${lvlSet} ]?`)){
 		//alert("lol, baka");

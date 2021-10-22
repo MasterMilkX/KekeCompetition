@@ -58,9 +58,9 @@ function sendReport(dat){
 }
 
 // SOLVE A LEVEL BY ID # FOR A LEVEL SET
-function solveLevel(ls,id){
+function solveLevel(ls,id,agent){
 	io.emit('pending-level',id);
-	let res = execjs.solveLevel(ls,id);
+	let res = execjs.solveLevel(ls,id,agent);
 	io.emit('finish-level',res);
 	console.log(`* FINISHED LEVEL [ ${id} ] *`)
 }
@@ -95,14 +95,9 @@ io.on('connection', (socket) => {
 
 //start training an agent on specific level set
 io.on('connection', (socket) => {
-	socket.on('start-run', (dat) => {
-		console.log(`-- RUNNING [ ${dat['agent']} ] ON LEVEL SET [ ${dat['levelSet']} ] --`);
-
-		//go through all of the levels
-		let usi = dat['unsolve_set_ids'];
-		for(let i=0;i<usi.length;i++){
-			solveLevel(dat['levelSet'],usi[i]);
-		}
+	socket.on('solve-level', (dat) => {
+		console.log(`-- SOLVING LEVEL [ ${dat['levelID']} ] FROM LEVEL SET [ ${dat['levelSet']} ] WITH AGENT [ ${dat['agent']} ] --`);
+		solveLevel(dat['levelSet'],dat['levelID'],dat['agent']);
 	});
 });
 
