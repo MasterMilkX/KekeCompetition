@@ -35,6 +35,10 @@ function getLevelSet(name){
 
 // IMPORT THE LEVEL BY ITS ID NUMBER
 function getLevelObj(ls, id){
+	if(typeof(ls) == 'string'){
+		ls = getLevelSet(ls);
+	}
+
 	for(let l=0;l<ls.length;l++){
 		let lvl = ls[l];
 		if (lvl.id == id){
@@ -73,7 +77,7 @@ function importAgentLevelSetReport(agent, lvlSet){
 	let r = importAgentReport(agent);
 	if(r == null){return null}	//no report made yet so just return the level set length
 
-
+	//search for the report
 	for(let i=0;i<r.length;i++){
 		let ls = r[i];
 		if (ls["levelSet"] == lvlSet){

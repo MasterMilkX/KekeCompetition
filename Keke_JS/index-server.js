@@ -9,6 +9,7 @@ app.use('favicon.ico', express.static('favicon.ico'));
 //import http server
 const http = require('http');
 const server = http.createServer(app);
+let PORT = 8080;
 
 //import socket io library for communication
 const { Server } = require("socket.io");
@@ -22,6 +23,12 @@ const jsonjs = require('./js/json_io');
 
 //import execution code
 const execjs = require('./js/exec');
+
+//import gui code
+const guijs = require('./js/gui');
+
+//import simulation code
+const simjs = require('./js/simulation')
 
 
 
@@ -51,6 +58,12 @@ io.on('connection', (socket) =>{
 function sendReport(dat){
 	let rep = jsonjs.importALSReport(dat['agent'],dat['levelSet']);
 	if (rep != null){
+		//add ascii maps (not included in report)
+		for(let i=0;i<rep.length;i++){
+			let am = jsonjs.getLevel(dat['levelSet'],rep[i]['id'])['ascii'];
+			rep[i]['ascii_map'] = am;
+		}
+
 		io.emit('return-agent-json',rep);
 	}else{
 		console.log(`- No JSON found for agent [ ${dat['agent']} ] ON LEVEL SET [ ${dat['levelSet']} ]... - `)
@@ -69,8 +82,10 @@ function solveLevel(ls,id,agent){
 ////     SERVER INTERACTIONS     ////
 
 
-//get the level set for the agent to populate the level table
+//start socket connection
 io.on('connection', (socket) => {
+
+	//get the level set for the agent to populate the level table
 	socket.on('get-level-set', (dat) =>{
 		let ls = dat['levelSet'];
 		console.log(`-- RETRIEVING LEVEL SET [ ${ls} ] --`)
@@ -82,37 +97,57 @@ io.on('connection', (socket) => {
 		}
 
 	})
-});
 
-//get agent json
-io.on('connection', (socket) => {
+
+	//get agent json
 	socket.on('get-agent-json', (dat) =>{
 		console.log(`-- RETRIEVING AGENT REPORT [ ${dat['agent']} ]`)
 		sendReport(dat);
-	})
-});
+	});
 
 
-//start training an agent on specific level set
-io.on('connection', (socket) => {
+	//start training an agent on specific level set
 	socket.on('solve-level', (dat) => {
 		console.log(`-- SOLVING LEVEL [ ${dat['levelID']} ] FROM LEVEL SET [ ${dat['levelSet']} ] WITH AGENT [ ${dat['agent']} ] --`);
 		solveLevel(dat['levelSet'],dat['levelID'],dat['agent']);
 	});
-});
 
 
-io.on('connection', (socket) =>{
+	//delete a json report for a specific agent and level set
 	socket.on('delete-json-set', (dat) =>{
 		jsonjs.deleteALSReport(dat['agent'],dat['levelSet']);
 		console.log(`-- DELETED REPORT FOR [ ${dat['agent']} ] ON LEVEL SET [ ${dat['levelSet']} ] --`)
 		io.emit('reset-agent-json', []);
 	});
+
+
+
+
+	//initialize the ascii map 
+	socket.on('reset-map', (dat) =>{
+		console.log(`LOADING NEW MAP: \n${dat['ascii_map']}`);
+		guijs.initMap(dat['ascii_map']);
+	});
+
+	//go through next step and update the map
+	socket.on('step-map', (dat) =>{
+		let d = guijs.updateMap(dat['step']);
+		io.emit('new-map', d);
+	});
+
+	//get the map key dictionary
+	socket.on('get-map-key', () =>{
+		let mk = simjs.getMapKey();
+		io.emit('ret-map-key',mk);
+	});
+
+
 });
 
 
 
+
 //listen on port 'localhost:8080' for incoming sockets
-server.listen(8080, () => {
-	console.log('listening on localhost:8080');	
+server.listen(PORT, () => {
+	console.log(`listening on localhost: ${PORT} ...`);	
 });

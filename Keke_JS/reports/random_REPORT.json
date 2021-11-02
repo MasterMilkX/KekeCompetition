@@ -4,87 +4,87 @@
     "levels": [
       {
         "id": 1,
-        "iterations": 0,
-        "time": 0,
-        "solution": "drdulrdrssdduluulrsdrulsrrduudrrruuuslsurruulussrr"
+        "iterations": 1,
+        "time": 0.001,
+        "solution": "sldrslssrrususrsslddlrruruullsrrsdlurllsrlrlludsud"
       },
       {
         "id": 2,
         "iterations": 10000,
-        "time": 0.169,
+        "time": 0.168,
         "solution": ""
       },
       {
         "id": 3,
         "iterations": 10000,
-        "time": 0.131,
+        "time": 0.083,
         "solution": ""
       },
       {
         "id": 4,
         "iterations": 4,
         "time": 0,
-        "solution": "sdsudusudrludsruusdlduuslluudddddsssdusdllduulddrl"
+        "solution": "ddlddlluddlddlludrsdlddlddrrsuuluuludlddsrddulurdu"
       },
       {
         "id": 5,
         "iterations": 10000,
-        "time": 0.179,
+        "time": 0.16,
         "solution": ""
       },
       {
         "id": 6,
-        "iterations": 2,
-        "time": 0,
-        "solution": "dlrldulssrurdrsrrsrsudlsdsuslrlddusssrrurruldlrrru"
+        "iterations": 6,
+        "time": 0.001,
+        "solution": "lrsrulrduluddrsdrldrurssuusrrdlulrrulusrlrlusussuu"
       },
       {
         "id": 7,
-        "iterations": 2,
+        "iterations": 0,
         "time": 0,
-        "solution": "udrrlursluuruuduudldldrrluulllldddllllsssusudululs"
+        "solution": "dlrluddlrudlsruldrdllrudsddsrsrllurduuururdldrluss"
       },
       {
         "id": 8,
-        "iterations": 1,
-        "time": 0,
-        "solution": "dulsdsdsrllurrrdllrdrldsdlssdlsuldrrddlrllrruuddsu"
+        "iterations": 10000,
+        "time": 0.205,
+        "solution": ""
       },
       {
         "id": 9,
-        "iterations": 10,
+        "iterations": 5,
         "time": 0,
-        "solution": "rrlrrrluslrululddsursuddurrlrssurldrssuusdrddusrss"
+        "solution": "drrlusrsrulruurssrdrlusudrsllusluuudrrdsudsdlsdsdu"
       },
       {
         "id": 10,
-        "iterations": 10000,
-        "time": 0.104,
-        "solution": ""
+        "iterations": 1,
+        "time": 0,
+        "solution": "sdruludllrsssudrrssruddursrssdlsddrsdudldrddruudld"
       },
       {
         "id": 11,
         "iterations": 10000,
-        "time": 3.406,
+        "time": 3.724,
         "solution": ""
       },
       {
         "id": 12,
         "iterations": 10000,
-        "time": 2.731,
+        "time": 2.992,
         "solution": ""
       },
       {
         "id": 13,
         "iterations": 10000,
-        "time": 0.186,
+        "time": 0.189,
         "solution": ""
       },
       {
         "id": 14,
-        "iterations": 4,
-        "time": 0,
-        "solution": "rllsdddsrssrduldrrddrssslslsrdsrdululusuurdrlddudl"
+        "iterations": 10000,
+        "time": 0.105,
+        "solution": ""
       }
     ]
   },
@@ -94,19 +94,19 @@
       {
         "id": 0,
         "iterations": 10000,
-        "time": 0.785,
+        "time": 0.774,
         "solution": ""
       },
       {
         "id": 1,
-        "iterations": 1,
-        "time": 0.001,
-        "solution": "dlssrsusdurdduslrudlsurldurlsddldrsrslrurrlullrrud"
+        "iterations": 32,
+        "time": 0.003,
+        "solution": "dldurdllrdudrudsslrlsdddssduudrlssullsllrrsrrsdrru"
       },
       {
         "id": 2,
         "iterations": 10000,
-        "time": 0.291,
+        "time": 0.335,
         "solution": ""
       }
     ]

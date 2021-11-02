@@ -5,85 +5,85 @@
       {
         "id": 1,
         "iterations": 22,
-        "time": 0.037,
+        "time": 0.029,
         "solution": "rrrrr"
       },
       {
         "id": 2,
         "iterations": 273,
-        "time": 0.272,
+        "time": 0.16,
         "solution": "rrrruuurddd"
       },
       {
         "id": 3,
-        "iterations": 4902,
-        "time": 10.002,
+        "iterations": 4936,
+        "time": 10.001,
         "solution": ""
       },
       {
         "id": 4,
         "iterations": 33,
-        "time": 0.023,
+        "time": 0.017,
         "solution": "lllll"
       },
       {
         "id": 5,
         "iterations": 1062,
-        "time": 0.782,
+        "time": 0.721,
         "solution": "rddrrurddruuu"
       },
       {
         "id": 6,
         "iterations": 504,
-        "time": 0.404,
+        "time": 0.391,
         "solution": "rrddrrruu"
       },
       {
         "id": 7,
         "iterations": 5,
-        "time": 0.004,
+        "time": 0.003,
         "solution": "rururu"
       },
       {
         "id": 8,
         "iterations": 10000,
-        "time": 0.004,
+        "time": 0.002,
         "solution": ""
       },
       {
         "id": 9,
         "iterations": 324,
-        "time": 0.22,
+        "time": 0.193,
         "solution": "ulllrrruuu"
       },
       {
         "id": 10,
         "iterations": 132,
-        "time": 0.073,
+        "time": 0.066,
         "solution": "ruurrrdd"
       },
       {
         "id": 11,
         "iterations": 214,
-        "time": 0.285,
+        "time": 0.258,
         "solution": "ddddrrrurrduuuuu"
       },
       {
         "id": 12,
         "iterations": 143,
-        "time": 0.206,
+        "time": 0.189,
         "solution": "ddddrrrrrrudllurdruuuuul"
       },
       {
         "id": 13,
         "iterations": 369,
-        "time": 0.305,
+        "time": 0.293,
         "solution": "rruuulull"
       },
       {
         "id": 14,
         "iterations": 227,
-        "time": 0.136,
+        "time": 0.135,
         "solution": "llllulddrrr"
       }
     ]

@@ -17,19 +17,19 @@
       {
         "id": 3,
         "iterations": 10000,
-        "time": 0.002,
+        "time": 0.001,
         "solution": ""
       },
       {
         "id": 4,
         "iterations": 10000,
-        "time": 0.002,
+        "time": 0.003,
         "solution": ""
       },
       {
         "id": 5,
         "iterations": 10000,
-        "time": 0.001,
+        "time": 0.002,
         "solution": ""
       },
       {
@@ -47,13 +47,13 @@
       {
         "id": 8,
         "iterations": 10000,
-        "time": 0,
+        "time": 0.001,
         "solution": ""
       },
       {
         "id": 9,
         "iterations": 10000,
-        "time": 0,
+        "time": 0.001,
         "solution": ""
       },
       {
@@ -65,13 +65,13 @@
       {
         "id": 11,
         "iterations": 10000,
-        "time": 0.001,
+        "time": 0,
         "solution": ""
       },
       {
         "id": 12,
         "iterations": 10000,
-        "time": 0,
+        "time": 0.001,
         "solution": ""
       },
       {

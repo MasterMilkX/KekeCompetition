@@ -2,7 +2,7 @@
 <!DOCTYPE html>
 <html lang="en">
 	<head>
-		<title>Level GUI Mode - Keke Competition (offline)</title>
+		<title>Level GUI Mode - Keke AI Competition (offline)</title>
 		<meta charset="utf-8">
 
 		<!-- bootstrap stuff -->
@@ -10,6 +10,7 @@
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+		<script src="/socket.io/socket.io.js"></script>
 
 
 		<!-- main stylesheet -->
@@ -24,6 +25,9 @@
 				/*border: 1px solid black;*/
 				color: var(--text);
 			}
+			input{
+				color:black;
+			}
 
 			#gameWindow{
 				background-color: #150E16;
@@ -32,6 +36,18 @@
 				width: 100%;
 				height: auto;
 			}
+
+			.lvlsetTxt{
+				color:#2CD115;
+			}
+			.lvlidTxt{
+				color:#3AF5E7;
+			}
+			.agentTxt{
+				color:#f00;
+			}
+
+
 			.btm_btn{
 				background-color: white;
 				color:black;
@@ -41,28 +57,22 @@
 			.btm_btn:hover{
 				cursor: pointer;
 			}
-			.sub:hover{
-				background-color: #F5E13A;
+			.pauseBg{
+				background-color: #F5BF3A;
 			}
-			.sha:hover{
-				background-color: #00fff0;
-			}
-			.dis{
-				background-color: #565656;
-				color:#676767;
+			.runBg{
+				background-color: #3AF59A;
 			}
 		</style>
-		<script src="js/baba.js"></script>
-		<script src="js/map.js"></script>
 
 	</head>
 
-	<body onload="initEditTest()">
+	<body onload="init()">
 		<div class='container top-buffer05'>
 			<!-- author header -->
 			<div class='row top-buffer05' id='authorID'>
 				<div class='col-xs-12 text-center' style='font-size: 1.5em' id='levelIndex'>
-					Level: #
+					Level Set: - Level: # - Agent: 
 				</div>
 			</div>
 			<!-- game window -->
@@ -75,21 +85,16 @@
 			</div>
 			<!-- special buttons -->
 			<div class='row row-no-gutters' style='border-color:white'>
-				<div class='col-xs-2 col-xs-offset-3 text-center btm_btn' onclick=''>
-					[R]eset<br>Level
-				</div>
-				<div class='col-xs-2 text-center' style='font-size: 1.3em'>
-					Agent:<br>
-					<select id='agentSet' style='color:black'>
-						<option value='human' selected>Human</option>
-						<option value='default'>Default</option>
-						<option value='random'>Random</option>
-					</select>
-				</div>
-				<div class='col-xs-2 text-center btm_btn' onclick=''>
-					Return to<br>Level List
+				<div class='col-xs-2 col-xs-offset-3 text-center btm_btn' onclick='resetMap()' id='resBtn'>Reset Level<br>[R]</div>
+				<div class='col-xs-2 text-center btm_btn runBg' onclick='toggleRun(this)' id='togBtn'>Start Run<br>[SPACE]</div>
+				<div class='col-xs-2 text-center btm_btn' onclick='window.close()' id='quitBtn'>Quit GUI Mode<br>[Q]</div>
+			</div>
+			<div class='row row-no-gutters top-buffer1'>
+				<div class='col-xs-6 col-xs-offset-3 text-center'>
+					ms/step: <input type='text' value='450' id='ms_step' size="4" onchange="updateTime()">
 				</div>
 			</div>
+
 			<!--
 			<div class='row row-no-gutters' style='border-color:white'>
 				<div class='col-xs-2 col-xs-offset-3 text-center btm_btn' id='controlCol' onclick='showControls()'>
@@ -105,8 +110,6 @@
 			-->
 		</div>
 
-		<!-- scripts -->
-		<script src="js/game.js"></script>
-		<script src="js/keke.js"></script>
+		<script src='./gui-client.js'></script>
 	</body>
 </html>

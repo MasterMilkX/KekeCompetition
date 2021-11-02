@@ -121,7 +121,7 @@ function executeLevel(ls,ln,iter,agent='default'){
 
 	//export to JSON if solution found
 	jsonjs.exportReport(agent + "_REPORT.json", ls, ln, iterCt, timeExec,solution);
-	return {"id":ln, "iterations":iterCt, "time":timeExec, "solution":solution};
+	return {"id":ln, "iterations":iterCt, "time":timeExec, "solution":solution, 'ascii_map':lvl.ascii};
 
 }
 

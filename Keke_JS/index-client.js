@@ -86,6 +86,7 @@ function addLevelRow(id,status='-', timeExec="?", iter='?',sol=""){
 		showBtn.classList.add('guiBtn');
 		showBtn.innerHTML = "Show Level";
 		showBtn.disabled = (sol.length > 0 ? true : false);
+		showBtn.onclick = function(){}
 		showBtn.value = sol;
 		c5.appendChild(showBtn);
 
@@ -105,7 +106,7 @@ function addLevelRow(id,status='-', timeExec="?", iter='?',sol=""){
 }
 
 // UPDATE A LEVEL TABLE ROW WITH JSON INFO
-function updateLevelRow(id, status, timeExec, iter, sol){
+function updateLevelRow(id, status, timeExec, iter, sol,ascii_map){
 	//get columns
 	let row = document.getElementById("levelRow"+id);
 	row.classList.remove('pendingLevel');
@@ -120,6 +121,7 @@ function updateLevelRow(id, status, timeExec, iter, sol){
 	c4.innerHTML = iter + " / 10000";
 	c5.disabled = (status == "SOLVED!" ? false : true);
 	c5.value = sol;
+	c5.onclick = function(){showLevelGUI(id,ascii_map,sol)}
 
 	//update row color
 	row.classList.add((status == "SOLVED!" ? "solvedLevel" : "unsolvedLevel"));
@@ -216,7 +218,7 @@ function updateStats(){
 	document.getElementById("level_win_num").innerHTML = winCt;
 	document.getElementById("level_lose_num").innerHTML = loseCt;
 	document.getElementById("level_unsolve_num").innerHTML = emptyCt;
-	document.getElementById("level_acc").innerHTML = levAcc.toFixed(3)*100.0 + "%";
+	document.getElementById("level_acc").innerHTML = (levAcc*100).toFixed(1) + "%";
 
 	document.getElementById("avg_iter").innerHTML = Math.round(iterCtAvg);
 	document.getElementById("avg_time").innerHTML = timeCtAvg.toFixed(3);
@@ -248,6 +250,16 @@ function updateLvlSet(){
 	loadAgentSet();
 }
 
+// OPEN THE GUI MODE
+function showLevelGUI(id,ascii_map,solution){
+	//set the local variables for transferability
+	localStorage.levelID = id;
+	localStorage.cur_ascii_map = ascii_map;
+	localStorage.cur_solution = solution;
+
+	//open a new window
+	window.open("game.html");
+}
 
 /////////    SERVER RECEPTION FUNCTIONS    //////////
 
@@ -304,7 +316,7 @@ socket.on('return-agent-json', function(j){
 	for(let i=0;i<j.length;i++){
 		let lvl = j[i];
 		let ss = (lvl['solution'].length > 0 ? "SOLVED!" : "MAXED");
-		updateLevelRow(lvl['id'],ss,lvl['time'],lvl['iterations'],lvl['solution']);
+		updateLevelRow(lvl['id'],ss,lvl['time'],lvl['iterations'],lvl['solution'],lvl['ascii_map']);
 	}
 	updateStats();
 });
@@ -329,7 +341,7 @@ socket.on('finish-level', function(lvl){
 	//update the level row with the new info
 	let ss = (lvl['solution'].length > 0 ? "SOLVED!" : "MAXED");
 	console.log("GOT LEVEL DATA: " + lvl['id']);
-	updateLevelRow(lvl['id'],ss,lvl['time'],lvl['iterations'],lvl['solution']);
+	updateLevelRow(lvl['id'],ss,lvl['time'],lvl['iterations'],lvl['solution'],lvl['ascii_map']);
 	unsolvedLevels.shift()	//remove the level from the unsolved listx
 
 	//solve the next level if possible
