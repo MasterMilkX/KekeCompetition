@@ -1,3 +1,6 @@
+//SERVER SIDE CODE THAT INTERACTS WITH THE BACKEND JS CALCULATIONS AND THE WEBAPP
+//Written by Milk
+
 ////  IMPORTS  ////
 
 //import express

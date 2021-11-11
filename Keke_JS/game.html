@@ -89,25 +89,12 @@
 				<div class='col-xs-2 text-center btm_btn runBg' onclick='toggleRun(this)' id='togBtn'>Start Run<br>[SPACE]</div>
 				<div class='col-xs-2 text-center btm_btn' onclick='window.close()' id='quitBtn'>Quit GUI Mode<br>[Q]</div>
 			</div>
+			<!-- time step  -->
 			<div class='row row-no-gutters top-buffer1'>
 				<div class='col-xs-6 col-xs-offset-3 text-center'>
 					ms/step: <input type='text' value='450' id='ms_step' size="4" onchange="updateTime()">
 				</div>
 			</div>
-
-			<!--
-			<div class='row row-no-gutters' style='border-color:white'>
-				<div class='col-xs-2 col-xs-offset-3 text-center btm_btn' id='controlCol' onclick='showControls()'>
-					Show<br> Control Hints
-				</div>
-				<div class='col-xs-2 text-center btm_btn' id='submitCol'>
-					SUBMIT<br> LEVEL
-				</div>
-				<div class='col-xs-2 text-center btm_btn' id='testerCol' onclick="toggleControl(this)">
-					Tester:<br> HUMAN
-				</div>
-			</div>
-			-->
 		</div>
 
 		<script src='./gui-client.js'></script>

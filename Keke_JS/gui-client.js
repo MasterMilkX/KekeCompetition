@@ -1,6 +1,7 @@
-var socket = io();
+//GUI MODE CLIENT SIDE JS
+//Written by Milk
 
-//import simulation code
+var socket = io();	//start socket communicator
 
 //set up the canvas
 var canvas = document.getElementById("gameWindow");
@@ -26,6 +27,7 @@ var keke_solution = [];
 var kt = 0;
 var solStep = 0;
 var solTime = 450; 
+var canUpdate = true;
 
 //win screen
 var wonGame = false;
@@ -38,9 +40,7 @@ winscreen.onload = function(){ws_ready = true;}
 
 //////////////////////////   KEKE SOLUTION FUNCTIONS   ///////////////////////
 
-var canUpdate = true;
-
-//reset the iterator to show each step
+// RESET THE ITERATOR TO SHOW EACH STEP
 function startRun(btn){
 	kt = setInterval(function(){
 		nextStep();
@@ -51,7 +51,7 @@ function startRun(btn){
 
 }
 
-//stop the iterator to show each step
+// STOP THE ITERATOR TO SHOW EACH STEP
 function stopRun(btn){
 	clearInterval(kt);
 	kt = 0;
@@ -93,7 +93,7 @@ function nextStep(){
 	solStep++;
 }
 
-
+// UPDATE THE TIME BETWEEN STEPS (MS)
 function updateTime(){
 	solTime = parseInt(document.getElementById("ms_step").value);
 }
@@ -168,11 +168,12 @@ function resetMap(m){
 
 }
 
+// GET THE MAP SPRITE DICTIONARY
 function getMapKey(){
 	socket.emit('get-map-key');
 }
 
-//turns a string object back into a 2d array
+// TURNS A STRING OBJECT BACK INTO A 2D ARRAY
 function parseMap(ms){
 	var newMap = [];
 	var rows = ms.split("\n");
@@ -285,11 +286,16 @@ window.addEventListener("keydown", function(e) {
 
 // HOTKEY BUTTONS
 window.addEventListener("keydown", function(e) {
+	//space - toggle running
     if(e.keyCode == 32){
     	toggleRun(document.getElementById("togBtn"))
-    }else if(e.keyCode == 82){
+    }
+    //r - reset the map
+    else if(e.keyCode == 82){
     	resetMap(orig_map);
-    }else if(e.keyCode == 81){
+    }
+    //q - close the gui mode window
+    else if(e.keyCode == 81){
     	window.close();
     }
 
