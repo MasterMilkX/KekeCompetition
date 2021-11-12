@@ -25,12 +25,12 @@ This version uses the JS implementation originally found on the [Baba is Y'all](
 #### Evaluation Mode
 Agent stats for a level set can be viewed on the main page. 
 
-<img src='md_imgs/gui_mode.png' width='300' height='100'>
+<img src='md_imgs/eval_mode.png' width='75%'>
 
 #### GUI Mode
 If an agent successfully solved a level, the solution can be viewed by clicking the 'Show level' button on the right most side of the level column.
 
-<img src='md_imgs/gui_mode.png' width='100' height='100'>
+<img src='md_imgs/gui_mode.png' width='30%'>
 
 ### Agents
 *Evaluator Agents* are saved in the [agents](agents/) folder with the extension `[NAME]_AGENT.js` and contains the following examples:
@@ -65,7 +65,7 @@ If an agent successfully solved a level, the solution can be viewed by clicking 
 5. Click the **'Reset all levels'** button to delete the saved reports for this agent on this level set 
 
 
-<img src='md_imgs/run_agent_tut.png' width='50' height='150'>
+<img src='md_imgs/run_agent_tut.png' width='20%'>
 
 
 ### Level Sets
