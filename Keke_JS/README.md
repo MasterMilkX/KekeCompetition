@@ -71,6 +71,25 @@ If an agent successfully solved a level, the solution can be viewed by clicking 
 ### Level Sets
 *Level sets* are ascii maps of Baba is You levels. Most of these levels were saved from the Baba is Y'all level editor.
 
+These level definitions can be found in [json_levels/](json_levels/) and have the form `[NAME]_LEVELS.json`.
+
+#### Level Evaluations
+ 
+Each level in the level set is placed in the evaluation table as its own row. The columns of the rows correspond to the following:
+* *ID #* - the id number of the level from the selected level set
+* *Status* - the current evalaution status for the level based on the agent. They can have the following status:
+    * *[ - ] (blank)* - the level has not been attempted to be solved by the agent 
+    <img src='md_imgs/unsolved_level.png' height='10'>
+    * *[ SOLVED! ]* - the level was successfully solved by the agent and a solution was produced
+    <img src='md_imgs/solved_level.png' height='10'>
+    * *[ SOLVING... ]* - the agent is currently attempting to solve the level
+    <img src='md_imgs/cur_solving_level.png' height='10'>
+    * *[ MAXED! ]* - the agent was unable to solve the level within the given iterations or time limit
+    <img src='md_imgs/maxed_level.png' height='10'>
+* *Time* - time taken by the agent (in s) to solve the level
+* *Iterations* - number of iterations (call to agent's `step()` function) to solve the level
+* *GUI Mode* - if the level was solved, the agent solution can be demonstrated in the rendered level via 'GUI Mode'
+
 
 ### License
 [MIT](https://choosealicense.com/licenses/mit/)
