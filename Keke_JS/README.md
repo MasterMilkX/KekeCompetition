@@ -79,13 +79,21 @@ Each level in the level set is placed in the evaluation table as its own row. Th
 * *ID #* - the id number of the level from the selected level set
 * *Status* - the current evalaution status for the level based on the agent. They can have the following status:
     * *[ - ] (blank)* - the level has not been attempted to be solved by the agent 
-    <img src='md_imgs/unsolved_level.png' height='10'>
+    
+    <img src='md_imgs/unsolved_level.png' width='800px' height='30px'>
+    
     * *[ SOLVED! ]* - the level was successfully solved by the agent and a solution was produced
-    <img src='md_imgs/solved_level.png' height='10'>
+     
+    <img src='md_imgs/solved_level.png' width='800px' height='30px'>
+    
     * *[ SOLVING... ]* - the agent is currently attempting to solve the level
-    <img src='md_imgs/cur_solving_level.png' height='10'>
+   
+    <img src='md_imgs/cur_solving_level.png' width='800px' height='30px'>
+    
     * *[ MAXED! ]* - the agent was unable to solve the level within the given iterations or time limit
-    <img src='md_imgs/maxed_level.png' height='10'>
+    
+    <img src='md_imgs/maxed_level.png' width='800px' height='30px'>
+    
 * *Time* - time taken by the agent (in s) to solve the level
 * *Iterations* - number of iterations (call to agent's `step()` function) to solve the level
 * *GUI Mode* - if the level was solved, the agent solution can be demonstrated in the rendered level via 'GUI Mode'
