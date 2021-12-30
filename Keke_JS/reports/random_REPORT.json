@@ -4,86 +4,86 @@
     "levels": [
       {
         "id": 1,
-        "iterations": 4,
+        "iterations": 8,
         "time": 0.002,
-        "solution": "ldusdrdrsddlddludrsldduuururlrrudrdsusdsrrrdulddsu"
+        "solution": "ddrdsdudrrrslddrursurulsrsssddrruduusssdusuuldsdrs"
       },
       {
         "id": 2,
         "iterations": 10000,
-        "time": 0.168,
+        "time": 0.169,
         "solution": ""
       },
       {
         "id": 3,
         "iterations": 10000,
-        "time": 0.085,
+        "time": 0.073,
         "solution": ""
       },
       {
         "id": 4,
         "iterations": 1,
         "time": 0,
-        "solution": "llrulrllslduslsrsulurdullrulsdllsdlrddsludusurulss"
+        "solution": "udlusrldrsrsludldrulldrdlsllusulususludsddullullur"
       },
       {
         "id": 5,
         "iterations": 10000,
-        "time": 0.15,
+        "time": 0.16,
         "solution": ""
       },
       {
         "id": 6,
         "iterations": 6,
         "time": 0,
-        "solution": "lslusrlulduldrrrsulsrrrrusrulsudsdslrrldslurlsddsl"
+        "solution": "sdssruuuslrrrusssdrusuusruuudlurldddulsdldsusdduuu"
       },
       {
         "id": 7,
-        "iterations": 1,
+        "iterations": 0,
         "time": 0,
-        "solution": "sduusluuurlurslrllruurdlrdlrsrddrusllrurdlsrddslul"
+        "solution": "ldlsddlllsururulludullllrlsrlsrslrdrulrdursdsurrsu"
       },
       {
         "id": 8,
-        "iterations": 1,
-        "time": 0,
-        "solution": "druduuudsrsssllrrssdsrruldldsrsursrluslsrusrsssrrl"
+        "iterations": 10000,
+        "time": 0.2,
+        "solution": ""
       },
       {
         "id": 9,
-        "iterations": 0,
+        "iterations": 3,
         "time": 0,
-        "solution": "llrllulssrulllususrlslrursrurrurduululldsurduurdlu"
+        "solution": "udrsdssusdruluurlsrulrssuslrsrrssudslddssldllrurrl"
       },
       {
         "id": 10,
-        "iterations": 1,
+        "iterations": 2,
         "time": 0,
-        "solution": "suldrlrurlusruslslrssdrrddrrduurslslsursllsrldsrur"
+        "solution": "rssrurldrrdsudrslrlululurslsuuurrurrllddulrldrluuu"
       },
       {
         "id": 11,
         "iterations": 10000,
-        "time": 3.472,
+        "time": 3.492,
         "solution": ""
       },
       {
         "id": 12,
         "iterations": 10000,
-        "time": 2.811,
+        "time": 2.817,
         "solution": ""
       },
       {
         "id": 13,
         "iterations": 10000,
-        "time": 0.176,
+        "time": 0.183,
         "solution": ""
       },
       {
         "id": 14,
         "iterations": 10000,
-        "time": 0.088,
+        "time": 0.107,
         "solution": ""
       }
     ]
@@ -107,6 +107,113 @@
         "id": 2,
         "iterations": 10000,
         "time": 0.335,
+        "solution": ""
+      }
+    ]
+  },
+  {
+    "levelSet": "user_milk_biy_LEVELS",
+    "levels": [
+      {
+        "id": 19,
+        "iterations": 4,
+        "time": 0.003,
+        "solution": "suulsslsllsulsrduldldllrruuddrssrlsrssslulrsslsurl"
+      },
+      {
+        "id": 25,
+        "iterations": 10000,
+        "time": 0.193,
+        "solution": ""
+      },
+      {
+        "id": 27,
+        "iterations": 10000,
+        "time": 0.212,
+        "solution": ""
+      },
+      {
+        "id": 30,
+        "iterations": 0,
+        "time": 0,
+        "solution": "drddlurslsudsrrdruuuudrlsrlrrdsduurddusdsussrsllsd"
+      },
+      {
+        "id": 32,
+        "iterations": 10000,
+        "time": 0.083,
+        "solution": ""
+      },
+      {
+        "id": 33,
+        "iterations": 10000,
+        "time": 0.086,
+        "solution": ""
+      },
+      {
+        "id": 39,
+        "iterations": 10000,
+        "time": 0.71,
+        "solution": ""
+      },
+      {
+        "id": 47,
+        "iterations": 0,
+        "time": 0,
+        "solution": "rddlursldurdlllssululldldlrssuudrlslsusrrdlrrsdrsr"
+      },
+      {
+        "id": 48,
+        "iterations": 10000,
+        "time": 0.082,
+        "solution": ""
+      },
+      {
+        "id": 49,
+        "iterations": 0,
+        "time": 0,
+        "solution": "drdduuuruusrruddrsululldrdrursursslluluussulurulrr"
+      },
+      {
+        "id": 50,
+        "iterations": 13,
+        "time": 0.001,
+        "solution": "uddrusrldslrdddsluddllrdlsrurrluuurllurdrlldsdlrdd"
+      },
+      {
+        "id": 51,
+        "iterations": 10000,
+        "time": 0.528,
+        "solution": ""
+      },
+      {
+        "id": 52,
+        "iterations": 10000,
+        "time": 0.504,
+        "solution": ""
+      },
+      {
+        "id": 59,
+        "iterations": 10000,
+        "time": 0.088,
+        "solution": ""
+      },
+      {
+        "id": 60,
+        "iterations": 10000,
+        "time": 0.082,
+        "solution": ""
+      },
+      {
+        "id": 194,
+        "iterations": 10000,
+        "time": 0.708,
+        "solution": ""
+      },
+      {
+        "id": 195,
+        "iterations": 10000,
+        "time": 0.085,
         "solution": ""
       }
     ]

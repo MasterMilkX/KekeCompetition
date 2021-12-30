@@ -199,5 +199,112 @@
         "solution": "llllulddrrr"
       }
     ]
+  },
+  {
+    "levelSet": "user_milk_biy_LEVELS",
+    "levels": [
+      {
+        "id": 19,
+        "iterations": 225,
+        "time": 0.234,
+        "solution": "ullluuuluurrrdd"
+      },
+      {
+        "id": 25,
+        "iterations": 3339,
+        "time": 10.004,
+        "solution": ""
+      },
+      {
+        "id": 27,
+        "iterations": 958,
+        "time": 1.117,
+        "solution": "llldluuldld"
+      },
+      {
+        "id": 30,
+        "iterations": 48,
+        "time": 0.036,
+        "solution": "rrdruu"
+      },
+      {
+        "id": 32,
+        "iterations": 4333,
+        "time": 10.001,
+        "solution": ""
+      },
+      {
+        "id": 33,
+        "iterations": 3440,
+        "time": 10.004,
+        "solution": ""
+      },
+      {
+        "id": 39,
+        "iterations": 428,
+        "time": 0.349,
+        "solution": "srrruusuuuuu"
+      },
+      {
+        "id": 47,
+        "iterations": 8,
+        "time": 0.003,
+        "solution": "rdd"
+      },
+      {
+        "id": 48,
+        "iterations": 8,
+        "time": 0.003,
+        "solution": "rdd"
+      },
+      {
+        "id": 49,
+        "iterations": 7,
+        "time": 0.002,
+        "solution": "rdd"
+      },
+      {
+        "id": 50,
+        "iterations": 229,
+        "time": 0.156,
+        "solution": "ullluuuluurrrdd"
+      },
+      {
+        "id": 51,
+        "iterations": 1567,
+        "time": 2.289,
+        "solution": "rrrurrruuuulu"
+      },
+      {
+        "id": 52,
+        "iterations": 488,
+        "time": 0.561,
+        "solution": "uuuuulu"
+      },
+      {
+        "id": 59,
+        "iterations": 4200,
+        "time": 10.001,
+        "solution": ""
+      },
+      {
+        "id": 60,
+        "iterations": 75,
+        "time": 0.043,
+        "solution": "rurdd"
+      },
+      {
+        "id": 194,
+        "iterations": 3297,
+        "time": 10.002,
+        "solution": ""
+      },
+      {
+        "id": 195,
+        "iterations": 2329,
+        "time": 5.242,
+        "solution": "rrdrdrdd"
+      }
+    ]
   }
 ]

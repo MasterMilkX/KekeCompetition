@@ -344,6 +344,9 @@ socket.on('finish-level', function(lvl){
 	updateLevelRow(lvl['id'],ss,lvl['time'],lvl['iterations'],lvl['solution'],lvl['ascii_map']);
 	unsolvedLevels.shift()	//remove the level from the unsolved listx
 
+	//update the stats
+	updateStats();
+
 	//solve the next level if possible
 	if(!executingAgent){return;}
 	solveNextLevel();
