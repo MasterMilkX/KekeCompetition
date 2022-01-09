@@ -170,5 +170,6 @@ function test(){
 
 
 module.exports = {
-	solveLevel: function(levelSet,id,agent){return executeLevel(levelSet,id,MAX_ITER,agent);}
+	solveLevel: function(levelSet,id,agent){return executeLevel(levelSet,id,MAX_ITER,agent);},
+	solveLevelSet: function(levelSet,agent){return executeLevelSet(levelSet,MAX_ITER,agent);}
 }
