@@ -887,31 +887,31 @@ function inArr(arr, e){
 ////////////////   KEYBOARD FUNCTIONS  //////////////////
 
 
-
 // GOTO THE NEXT DIRECTIONAL POINT IN THE SOLUTION STEP
-function nextMove(nextDir,game_state){
+function nextMove(nextDir,state){
+
 	//reset
 	var moved_objects = [];
 	moved = false;
 
 	//if directional move, move the players
 	if(nextDir != "space")
-		movePlayers(nextDir, moved_objects, game_state);
+		movePlayers(nextDir, moved_objects, state);
 
 	//move the movers (i.e. X-is-MOVE objects)
-	moveAutoMovers(moved_objects, game_state);
+	moveAutoMovers(moved_objects, state);
 
 	//update the rule set if this object is a rule
 	for(var m=0;m<moved_objects.length;m++){
 		//if(inArr(rule_objs, movedObjs[m]))
 		if(moved_objects[m].type == "word"){
-			interpretRules(game_state);
+			interpretRules(state);
 		}
 	}
 
 	//check if the game has been won
-	wonGame = win(game_state['players'],game_state['winnables']);
-	return {'next_state':game_state,'won':wonGame};
+	wonGame = win(state['players'],state['winnables']);
+	return {'next_state':state,'won':wonGame};
 }
 
 

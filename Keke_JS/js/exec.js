@@ -31,12 +31,13 @@ function run_keke(ascii_level, iterations){
 
 	//solve for # iterations
 	let i=0;
+	let solution = [];
 	for(i=0;i<iterations;i++){
 		//check if timed out
 		if(timedOut(start)){break;}
 
 		//try to find solution
-		let solution = kekejs.step(gp);
+		solution = kekejs.step(gp);
 
 		// solution found
 		if (solution.length > 0){
@@ -47,11 +48,11 @@ function run_keke(ascii_level, iterations){
 			let timeExec = (end-start)/1000;
 
 			//check validity of solution; repeat if invalid
-			if(!validSolution(solution,gp)){continue;}
+			if(!validSolution(solution,ascii_level)){continue;}
 
 			//winning solution -> return good solution
 			console.log(`-- SOLUTION FOUND IN ${i} / ${iterations} ITERATIONS | ${timeExec}s --`);
-			return {"s":simjs.miniSol(solution),"i":i, "t":timeExec};
+			return {"s":simjs.miniSol(solution),"i":i, "t":timeExec,'w':true};
 		}
 	}
 
@@ -62,7 +63,8 @@ function run_keke(ascii_level, iterations){
 	let REASON = (i == iterations ? `MAXED ITERATIONS (${iterations})` : `TIMED OUT (${TIMEOUT})s`)
 
 	console.log(`-- NO SOLUTION FOUND: ${REASON}--`);
-	return {"s":'',"i":i, "t":timeExec};
+	let closest_sol = (solution.length > 0 ? solution : kekejs.best_sol().length);
+	return {"s":simjs.miniSol(closest_sol),"i":i, "t":timeExec,'w':false};
 	
 }
 
@@ -76,18 +78,24 @@ function timedOut(s){
 }
 
 // CHECK IF THE SOLUTION RETURNED IS VALID AND WINNABLE
-function validSolution(sol, game_state){
-	let new_gs = game_state;
+function validSolution(sol, init_map){
+	simjs.setupLevel(simjs.parseMap(init_map));
+	let state = simjs.getGamestate();
+
+	//console.log("after KEKE (" + sol[i] + "): \n" + simjs.doubleMap2Str(new_gs.obj_map, new_gs.back_map));
+
 	for(let i=0;i<sol.length;i++){
 		//iterate overgame state
-		let res = simjs.nextMove(sol[i],new_gs);
-		new_gs = res['next_state'];
+		let res = simjs.nextMove(sol[i],state);
+		state = res['next_state'];
 		didwin = res['won'];
 
-		//winning solution reached
-		if(didwin){return true;}
+		//console.log("after KEKE (" + sol[i] + "): \n" + simjs.doubleMap2Str(state.obj_map, state.back_map));
 
-		//console.log("after KEKE (" + sol[i] + "): \n" + simjs.doubleMap2Str(new_gs.obj_map, new_gs.back_map));
+		//winning solution reached
+		if(didwin){
+			return true;
+		}
 
 	}
 
@@ -117,11 +125,12 @@ function executeLevel(ls,ln,iter,agent='default'){
 	let solution = r.s;
 	let iterCt = r.i;
 	let timeExec = r.t;
+	let win = r.w;
 
 
 	//export to JSON if solution found
-	jsonjs.exportReport(agent + "_REPORT.json", ls, ln, iterCt, timeExec,solution);
-	return {"id":ln, "iterations":iterCt, "time":timeExec, "solution":solution, 'ascii_map':lvl.ascii};
+	jsonjs.exportReport(agent + "_REPORT.json", ls, ln, iterCt, timeExec,solution,win);
+	return {"id":ln, "iterations":iterCt, "time":timeExec, "solution":solution, 'ascii_map':lvl.ascii, 'won_level':win};
 
 }
 
@@ -145,11 +154,12 @@ function executeLevelSet(ls,iter,agent='default'){
 		let solution = r.s;
 		let iterCt = r.i;
 		let timeExec = r.t;
+		let win = r.w;
 
 		
 		//export to JSON if solution found
-		jsonjs.exportReport(agent + "_REPORT.json", ls, lvl.id, iterCt, timeExec,solution);
-		report.push({"id":lvl.id, "iterations":iterCt, "time":timeExec, "solution":solution});
+		jsonjs.exportReport(agent + "_REPORT.json", ls, lvl.id, iterCt, timeExec,solution,win);
+		report.push({"id":lvl.id, "iterations":iterCt, "time":timeExec, "solution":solution, "won_level":win});
 
 		console.log("");
 	}

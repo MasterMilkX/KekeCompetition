@@ -89,7 +89,7 @@ function importAgentLevelSetReport(agent, lvlSet){
 }
 
 // EXPORT THE RESULT FROM SOLVING A LEVEL TO THE AGENT'S JSON FILE
-function exportAgentReport(file,ls,levelID,iterCt,timeTaken,sol){
+function exportAgentReport(file,ls,levelID,iterCt,timeTaken,sol,winner){
 	let curReport = [];
 	let filepath = "./reports/"+file;
 
@@ -123,7 +123,7 @@ function exportAgentReport(file,ls,levelID,iterCt,timeTaken,sol){
 		lsObj = {levelSet: ls, levels:[]};
 
 		//add the level
-		let lvl = {id: levelID, iterations: iterCt, time:timeTaken, solution:sol};
+		let lvl = {id: levelID, iterations: iterCt, time:timeTaken, solution:sol, won_level:winner};
 		lsObj.levels.push(lvl);
 
 		//add new levelset entry
@@ -135,12 +135,12 @@ function exportAgentReport(file,ls,levelID,iterCt,timeTaken,sol){
 
 		//add a new entry to the set
 		if(lvl == null){
-			lvl = {id: levelID, iterations: iterCt, time:timeTaken, solution:sol};
+			lvl = {id: levelID, iterations: iterCt, time:timeTaken, solution:sol, won_level:winner};
 			lsObj.levels.push(lvl);
 		} 
 		//update an old entry if newer is faster
 		else if((lvl.time > timeTaken) || (lvl.solution == "" && sol != "")){
-			lvl = {id: levelID, iterations: iterCt, time:timeTaken, solution:sol};
+			lvl = {id: levelID, iterations: iterCt, time:timeTaken, solution:sol, won_level:winner};
 			let lvlInd = lsObj.levels.map(o => o.id).indexOf(levelID);
 			lsObj.levels[lvlInd] = lvl;
 		}
@@ -222,7 +222,7 @@ module.exports = {
 	getAgentList : function(){return getAgentList();},
 	importAgentReport: function(a){return importAgentReport(a);},
 	importALSReport: function(a, l){return importAgentLevelSetReport(a, l);},
-	exportReport: function(f,ls,id,i,t,s){exportAgentReport(f,ls,id,i,t,s);},
+	exportReport: function(f,ls,id,i,t,s,w){exportAgentReport(f,ls,id,i,t,s,w);},
 	deleteALSReport: function(a,l){return deleteAgentLevelSetReport(a,l);}
 
 }

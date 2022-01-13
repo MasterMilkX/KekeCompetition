@@ -138,7 +138,6 @@ function getChildren(rootMap, parent){
 
 		//let n_kk_p = deepCopyObject(rootstate);
 		let childNode = getNextState(possActions[a], n_kk_p, parent);
-	
 
 		//add if not already in the queue
 		if(stateSet.indexOf(childNode[1].mapRep) == -1 && !childNode[1].died)
@@ -149,23 +148,23 @@ function getChildren(rootMap, parent){
 }
 
 // RETURNS AN ASCII REPRESENTATION OF THE MAP STATE AFTER AN ACTION IS TAKEN
-function getNextState(dir, new_kk_p, parent){
+function getNextState(dir, state, parent){
 	//get the action space from the parent + new action
 	let newActions = [];
 	newActions.push.apply(newActions, parent.actionSet);
 	newActions.push(dir);
 
-	//console.log("before KEKE (" + newActions + "): \n" + simjs.doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map))
+	//console.log("before KEKE (" + newActions + "): \n" + simjs.doubleMap2Str(state.obj_map, state.back_map))
 
 	//move the along the action space
 	let didwin = false;
 	for(let a=0;a<newActions.length;a++){
-		let res = simjs.nextMove(newActions[a],new_kk_p);
-		new_kk_p = res['next_state'];
+		let res = simjs.nextMove(newActions[a],state);
+		state = res['next_state'];
 		didwin = res['won'];
 
 		//everyone died
-		if(new_kk_p['players'].length == 0){
+		if(state['players'].length == 0){
 			didwin = false;
 			break;
 		}
@@ -173,14 +172,14 @@ function getNextState(dir, new_kk_p, parent){
 	}
 
 	//return distance from nearest goal for priority queue purposes
-	let win_d = heuristic2(new_kk_p['players'], new_kk_p['winnables']);
-	let word_d = heuristic2(new_kk_p['players'], new_kk_p['words']);
-	let push_d = heuristic2(new_kk_p['players'], new_kk_p['pushables']);
+	let win_d = heuristic2(state['players'], state['winnables']);
+	let word_d = heuristic2(state['players'], state['words']);
+	let push_d = heuristic2(state['players'], state['pushables']);
 	//console.log(d);
-	//console.log("after KEKE (" + newActions + "): \n" + simjs.doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map));
+	//console.log("after KEKE (" + newActions + "): \n" + simjs.doubleMap2Str(state.obj_map, state.back_map));
 
 
-	return [(win_d+word_d+push_d)/3, new node(simjs.doubleMap2Str(new_kk_p.obj_map, new_kk_p.back_map), newActions, parent, didwin, (new_kk_p['players'].length == 0))]
+	return [(win_d+word_d+push_d)/3, new node(simjs.doubleMap2Str(state.obj_map, state.back_map), newActions, parent, didwin, (state['players'].length == 0))]
 }
 
 
@@ -208,12 +207,11 @@ function dist(a,b){
 
 
 
-
-
 // VISIBLE FUNCTION FOR OTHER JS FILES (NODEJS)
 module.exports = {
 	step : function(init_state){return iterSolve(init_state)},
-	init : function(init_state){initQueue(init_state);}
+	init : function(init_state){initQueue(init_state);},
+	best_sol : function(){return (queue.length > 1 ? queue.shift()[1].actionSet : []);}
 }
 
 
