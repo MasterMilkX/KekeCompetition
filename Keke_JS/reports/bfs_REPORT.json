@@ -1,0 +1,126 @@
+[
+  {
+    "levelSet": "user_milk_biy_LEVELS",
+    "levels": [
+      {
+        "id": 19,
+        "iterations": 225,
+        "time": 0.184,
+        "solution": "ullluuuluurrrdd",
+        "won_level": true
+      },
+      {
+        "id": 25,
+        "iterations": 10000,
+        "time": 9.613,
+        "solution": "",
+        "won_level": false
+      },
+      {
+        "id": 27,
+        "iterations": 10000,
+        "time": 7.553,
+        "solution": "",
+        "won_level": false
+      },
+      {
+        "id": 30,
+        "iterations": 4673,
+        "time": 3.151,
+        "solution": "ullluuluuurrdddddrdddruu",
+        "won_level": true
+      },
+      {
+        "id": 32,
+        "iterations": 1645,
+        "time": 1.121,
+        "solution": "ullluuluuurrdddddrrddlldd",
+        "won_level": true
+      },
+      {
+        "id": 33,
+        "iterations": 7586,
+        "time": 10.002,
+        "solution": "",
+        "won_level": false
+      },
+      {
+        "id": 39,
+        "iterations": 9820,
+        "time": 10.001,
+        "solution": "",
+        "won_level": false
+      },
+      {
+        "id": 47,
+        "iterations": 10,
+        "time": 0.005,
+        "solution": "rrdrduduulluddd",
+        "won_level": true
+      },
+      {
+        "id": 48,
+        "iterations": 2,
+        "time": 0.002,
+        "solution": "rrdrduduulllrdd",
+        "won_level": true
+      },
+      {
+        "id": 49,
+        "iterations": 441,
+        "time": 0.185,
+        "solution": "rrdrdldrrrrrrls",
+        "won_level": true
+      },
+      {
+        "id": 50,
+        "iterations": 1076,
+        "time": 0.57,
+        "solution": "ullluuuluurrurddrrrlllduurddls",
+        "won_level": true
+      },
+      {
+        "id": 51,
+        "iterations": 2536,
+        "time": 2.754,
+        "solution": "rrdrdudruuurrruruuu",
+        "won_level": true
+      },
+      {
+        "id": 52,
+        "iterations": 1204,
+        "time": 1.845,
+        "solution": "ruulluuruu",
+        "won_level": true
+      },
+      {
+        "id": 59,
+        "iterations": 10000,
+        "time": 7.814,
+        "solution": "",
+        "won_level": false
+      },
+      {
+        "id": 60,
+        "iterations": 74,
+        "time": 0.1,
+        "solution": "rrdrdudrrrrullluuurldddrdd",
+        "won_level": true
+      },
+      {
+        "id": 194,
+        "iterations": 7916,
+        "time": 10.001,
+        "solution": "",
+        "won_level": false
+      },
+      {
+        "id": 195,
+        "iterations": 10000,
+        "time": 8.212,
+        "solution": "",
+        "won_level": false
+      }
+    ]
+  }
+]
