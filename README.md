@@ -7,3 +7,5 @@ This is the source code for the framework of the Keke AI Competition. This compe
 [JS Version](Keke_JS/)
 
 [Python Version]() (coming soon!)
+
+Download the code and read the track's README to get started with your agent!
