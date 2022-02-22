@@ -65,6 +65,7 @@ function getChildren(parent, map) {
 // NEXT ITERATION STEP FOR SOLVING
 function iterSolve(initState) {
   // PERFORM ITERATIVE CALCULATIONS HERE //
+  console.log(stack.length);
   if (stack.length > 0) {
     const parent = stack.pop();
     const children = getChildren(parent, initState.orig_map);

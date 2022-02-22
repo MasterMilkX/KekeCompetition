@@ -6,6 +6,14 @@
 const fs = require('fs')
 
 
+////////   CHECK EXISTENCE OF FILES   /////////
+
+function agentExists(agent){return fs.existsSync("agents/"+agent+"_AGENT.js");}
+function levSetExists(ls){return fs.existsSync("json_levels/"+ls+".json");}
+
+
+
+
 /////////    LEVEL SET JSON I/O    //////////
 
 
@@ -38,6 +46,8 @@ function getLevelObj(ls, id){
 	if(typeof(ls) == 'string'){
 		ls = getLevelSet(ls);
 	}
+
+	if(ls == null){return null}
 
 	for(let l=0;l<ls.length;l++){
 		let lvl = ls[l];
@@ -223,6 +233,10 @@ module.exports = {
 	importAgentReport: function(a){return importAgentReport(a);},
 	importALSReport: function(a, l){return importAgentLevelSetReport(a, l);},
 	exportReport: function(f,ls,id,i,t,s,w){exportAgentReport(f,ls,id,i,t,s,w);},
-	deleteALSReport: function(a,l){return deleteAgentLevelSetReport(a,l);}
+	deleteALSReport: function(a,l){return deleteAgentLevelSetReport(a,l);},
+
+	//existence
+	agent_exists : function(a){return agentExists(a);},
+	level_set_exists : function(l){return levSetExists(l);}
 
 }

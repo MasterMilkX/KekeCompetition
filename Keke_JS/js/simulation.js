@@ -728,9 +728,13 @@ function changeSprite(o, w, om, bm, phys, sort_phys){
 	var charac = reverseChar(w+"_obj");
 	var o2 = new phys_obj(w, o.x, o.y);
 	phys.push(o2);		//in with the new...
+
+	console.log("map: " + om.length + "," + om[0].length)
+	console.log("pos: " + o.x + "," + o.y)
+	console.log(om[o.y][o.x])
 	
 	//replace object on obj_map/back_map
-	if(objAtPos(o.y, o.x, om) == o)
+	if(objAtPos(o.x, o.y, om) == o)
 		om[o.y][o.x] = o2;
 	else
 		bm[o.y][o.x] = o2;
@@ -888,6 +892,7 @@ function inArr(arr, e){
 
 
 // GOTO THE NEXT DIRECTIONAL POINT IN THE SOLUTION STEP
+// THE PROBLEM IS HERE !!
 function nextMove(nextDir,state){
 
 	//reset

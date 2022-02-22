@@ -63,7 +63,9 @@ function sendReport(dat){
 	if (rep != null){
 		//add ascii maps (not included in report)
 		for(let i=0;i<rep.length;i++){
-			let am = jsonjs.getLevel(dat['levelSet'],rep[i]['id'])['ascii'];
+			let l = jsonjs.getLevel(dat['levelSet'],rep[i]['id']);
+			if(l == null){continue;}
+			let am = l['ascii'];
 			rep[i]['ascii_map'] = am;
 		}
 
@@ -96,7 +98,8 @@ io.on('connection', (socket) => {
 		if(j != null){
 			io.emit('return-level-json', j);
 		}else{
-			console.log("ERROR: JSON NOT FOUND!")
+			console.log("ERROR: JSON NOT FOUND!");
+			io.emit('level-set-404');
 		}
 
 	})
@@ -144,6 +147,13 @@ io.on('connection', (socket) => {
 		io.emit('ret-map-key',mk);
 	});
 
+
+	//check if the agent and level set exist
+	socket.on('als_exists',(dat) =>{
+		if(!jsonjs.agent_exists(dat["agent"])){io.emit('agent-404');} 
+		if(!jsonjs.level_set_exists(dat["levelSet"])){io.emit('level-set-404');} 
+		io.emit("set-als")
+	});
 
 });
 

@@ -36,7 +36,8 @@ function useLastSetup(){
 
 // CALLED AT THE INITIALIZATION OF THE SYSTEM/SITE
 function init(){
-	loadAgentSet();
+	//loadAgentSet();
+
 	setInterval(pendEllipse,500);   //iterate ellipses for pending levels
 	
 	//make sure the table is always loaded on start
@@ -328,6 +329,20 @@ socket.on('reset-agent-json', function(){
 });
 
 
+// LEVEL SET NOT FOUND SO USE THE DEFAULT ONE
+socket.on('level-set-404', function(){
+	localStorage.lvlSet = "test";
+});
+
+//AGENT NOT FOUND SO USE THE EMPTY ONE
+socket.on('agent-404', function(){
+	localStorage.agent = "empty";
+})
+
+socket.on('set-als',function(){
+	loadAgentSet();
+});
+
 
 
 
@@ -356,6 +371,12 @@ socket.on('finish-level', function(lvl){
 
 /////////    CLIENT BROADCAST FUNCTIONS    //////////
 
+//check if the saved agent and level set exists in the file I/O
+function checkALS(){
+	socket.emit('als_exists', {'agent':localStorage.agent, 'levelSet':localStorage.lvlSet});
+}
+
+//load the agents and levels
 function loadAgentSet(){
 	loadLevelSet();
 	loadAgentJSON();
