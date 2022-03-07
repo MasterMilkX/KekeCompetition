@@ -4,6 +4,8 @@ This is the source code for the framework of the Keke AI Competition. This compe
 
 [![Getting Started Guide](https://github.com/MasterMilkX/KekeCompetition/blob/main/Keke_JS/md_imgs/walkthrough_card.png)](https://youtu.be/_6aB1Y4oQIw)
 
+Click the Youtube video image above to see a step-by-step getting started guide!
+
 
 2 Versions of the competition will be available: 
 
