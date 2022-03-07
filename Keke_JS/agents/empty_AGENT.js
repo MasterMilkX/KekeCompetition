@@ -1,4 +1,4 @@
-// BABA IS Y'ALL SOLVER - BLACK TEMPLATE
+// BABA IS Y'ALL SOLVER - BLANK TEMPLATE
 // Version 1.0
 // Code by Milk 
 

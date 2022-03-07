@@ -63,7 +63,7 @@ function run_keke(ascii_level, iterations){
 	let REASON = (i == iterations ? `MAXED ITERATIONS (${iterations})` : `TIMED OUT (${TIMEOUT})s`)
 
 	console.log(`-- NO SOLUTION FOUND: ${REASON}--`);
-	let closest_sol = (solution.length > 0 ? solution : kekejs.best_sol().length);
+	let closest_sol = (solution.length > 0 ? solution : kekejs.best_sol());
 	return {"s":simjs.miniSol(closest_sol),"i":i, "t":timeExec,'w':false};
 	
 }
