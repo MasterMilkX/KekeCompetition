@@ -231,23 +231,23 @@
     "levels": [
       {
         "id": 0,
-        "iterations": 647,
-        "time": 0.138,
-        "solution": "urrruuuurludlsslruuurusssdsrsdsdlrdrlulusdludusdur",
-        "won_level": true
+        "iterations": 10000,
+        "time": 1.832,
+        "solution": "uursurruldslurdlurrdurrrsuusrsrddsuudrllsdudrsrldd",
+        "won_level": false
       },
       {
         "id": 1,
-        "iterations": 500,
-        "time": 0.062,
-        "solution": "usdlullurssdsssdulurrsuluurllludurrdrrrlurllddudlu",
+        "iterations": 16,
+        "time": 0.002,
+        "solution": "uslrlldlussdlluuuudurlduurllrrdsulsurudrdrusurdusl",
         "won_level": true
       },
       {
         "id": 2,
         "iterations": 10000,
-        "time": 1.449,
-        "solution": "sdrrrsduuddldlurllrlrdrrdsdssdussrsdrdrrsrsldlssrd",
+        "time": 1.388,
+        "solution": "uusdrldldsussrurursursddlrrdrdrrrsrslllldsluurrrld",
         "won_level": false
       }
     ]

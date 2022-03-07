@@ -19,7 +19,7 @@ This version uses the JS implementation originally found on the [Baba is Y'all](
 
 ### Usage
 #### Start the server: 
-1. Run the command `node index-server.js`. 
+1. Run the command `nodemon index-server.js`. 
 2. In a browser, go to the URL `localhost:8080` 
     *Note*: this port number can be changed on _line 15_ in the [index-server.js](index-server.js) file. 
     There will be an error with NodeJS if the port is already in use.

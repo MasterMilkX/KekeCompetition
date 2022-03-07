@@ -415,6 +415,50 @@ function clearLevel(state){
 	}
 }
 
+//sets a state to the original ascii map passed
+function setStateByMap(state,original_ascii){
+	clearLevel(state);
+  	state.orig_map = original_ascii;
+  	[state.back_map, state.obj_map] = splitMap(state.orig_map);
+  	assignMapObjs(state);
+  	interpretRules(state);
+}
+
+//creates a brand new state from an ascii map
+function newState(ascii_map){
+	let s = {};
+	s['orig_map'] = []
+	s['obj_map'] = []
+	s['back_map'] = []
+	s['words'] = [];
+	s['phys'] = [];
+	s['is_connectors'] = [];
+	s['sort_phys'] = {};
+	s['rules'] = [];
+	s['rule_objs'] = [];
+	s['players'] = [];
+	s['auto_movers'] = [];
+	s['winnables'] = [];
+	s['pushables'] = [];
+	s['killers'] = [];
+	s['sinkers'] = [];
+	s['featured'] = {};
+	s['overlaps'] = [];
+	s['unoverlaps'] = [];
+
+	s.orig_map = ascii_map;
+  	[s.back_map, s.obj_map] = splitMap(s.orig_map);
+  	assignMapObjs(s);
+  	interpretRules(s);
+
+  	return s
+}
+
+//return the map of the state
+function showState(state){
+	return doubleMap2Str(state.obj_map,state.back_map)
+}
+
 //check if array contains string with a substring
 function has(arr, ss){
 	for(var i=0;i<arr.length;i++){
@@ -1220,19 +1264,23 @@ module.exports = {
 	setupLevel : function(m) {makeLevel(m);},
 	getGamestate : function(){ return game_state;},
 	clearLevel : function(state){clearLevel(state);},
-	nextMove : function(action,gs){return nextMove(action,gs);},
-
+	setState : function(state,m){setStateByMap(state,m)},
+	newState : function(m){return newState(m);},
+	showState : function(s){return showState(s);},
+	
 	parseMap : function(m) { return parseMap(m);},
 	map2Str : function(m){return map2Str(m);},
-	doubleMap2Str: function(om, bm){return doubleMap2Str(om, bm)},
-	splitMap : function(m){return splitMap(m)},
+	doubleMap2Str: function(om, bm){return doubleMap2Str(om, bm);},
+	splitMap : function(m){return splitMap(m);},
 
-	assignMapObjs : function (state){assignMapObjs(state)},
+
+	assignMapObjs : function (state){assignMapObjs(state);},
+	nextMove : function(action,gs){return nextMove(action,gs);},
 	interpretRules : function (state){interpretRules(state)},
-	win: function(p,w){return win(p,w)},
+	win: function(p,w){return win(p,w);},
 
-	movePlayers : function(d, m, p){movePlayers(d,m,p)},
-	moveAutoMovers: function(m, p){moveAutoMovers(m,p)},
+	movePlayers : function(d, m, p){movePlayers(d,m,p);},
+	moveAutoMovers: function(m, p){moveAutoMovers(m,p);},
 
 	miniSol : function(s){return minimizeSolution(s);},
 	transSol : function(s){return translateSol(s);},

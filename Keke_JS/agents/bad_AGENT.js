@@ -1,4 +1,5 @@
-// BABA IS Y'ALL SOLVER - RANDOM AGENT TEMPLATE
+// BABA IS Y'ALL SOLVER - BAD AGENT TEMPLATE
+// Bad because missing function calls in the module.exports
 // Version 1.0
 // Code by Milk 
 
