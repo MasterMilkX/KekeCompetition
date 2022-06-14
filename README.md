@@ -11,6 +11,6 @@ Click the Youtube video image above to see a step-by-step getting started guide!
 
 [JS Version](Keke_JS/) 
 
-[Python Version]() (coming soon!)
+[Python Version]() (coming in 2023!)
 
 Download the code and read the track's README to get started with your agent!
